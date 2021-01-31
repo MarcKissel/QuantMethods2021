@@ -192,11 +192,11 @@ You are going to get frustrated. Learning anything takes time and patience. And 
 
 class: inverse
 
-# Class mechanics
+## Class mechanics
 
-1. There is no textbook to buy for this class and all the software we will use is free. But free things come with another type of price. In this case I will be building the course as we go and things might be a bit wonky at times. 
+### 1. There is no textbook to buy for this class and all the software we will use is free. But free things come with another type of price. In this case I will be building the course as we go and things might be a bit wonky at times. 
 
-## 2. **Assessments**
+### 2. **Assessments**
   - "Homework"
   - Stats in the news
   - Data analysis
@@ -204,7 +204,7 @@ class: inverse
   - weekly readings
 
   
-## 3. Lab time
+### 3. Lab time
   - the only way to learn R is to practice. You should devote time in the week not just to the homework but to 'playing' with R. It is fun (in a nerdy sort of way)
   
 
@@ -216,103 +216,6 @@ __________________________
 
 
 ##Why don't scientists just use common sense?
-
-
---
-
-
-
-##Simpsons paradox 
-
-the association between a pair of variables
-(X, Y ) reverses sign upon conditioning of a third variable, Z. If we partition the data into sub-populations, each representing a specific value of the third variable, the phenomena appears as a sign reversal between the associations measured in the disaggregated subpopulations relative to the aggregated data, which describes the population as a whole.
-
----
-
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Simpson%27s_paradox_continuous.svg/1280px-Simpson%27s_paradox_continuous.svg.png)
-
----
-
-Another example are test scores between states
-
-
-???
-https://www.youtube.com/watch?v=ebEkn-BiW5k
-
-
----
-
-
-
-
-
----
-class: center, middle, inverse
-
-# Course Topics  
-
-note: order might change as we work together on this
----
-class: center, middle, inverse
-#  intro to the class <- hey, that's today!
----
-class: center, middle, inverse
-# Some history
-
----
-class: center, middle, inverse
-# Overview of R
-
-How to use/install/work with R
-
-
----
-class: center, middle, inverse
-# Working with data (data entry/storage)
-
-This will talk about best practices for recording data. We will work with Excel and other spreadsheets and talk about common problems. 
-
----
-# Data visualization 
-
-How to make useful plots, graphs, etc.
-
-
----
-class: center, middle, inverse
-EDA
-
-How to explore data to get a feel for it
-
----
-class: center, middle, inverse
-Descriptive Statistics 
-
-mean, median, SD, 
----
-class: center, middle, inverse
-Statistical theory 
-
-probability
-
-
----
-class: center, middle, inverse
-Model building
-
----
-
-class: center, middle, inverse
-
-# 10. Applications
-
-geostats, etc
----
-class: center, inverse 
-
-#today's framework
-
-## Some examples of how we can use and misuse stats
 
 
 ---
@@ -327,7 +230,7 @@ class: inverse
 ---
 class: inverse
 
-![](images/fox_fraud.png)
+![](https://www.callingbullshit.org/case_studies/img/fox_fraud.png)
 
 ---
 
@@ -385,11 +288,11 @@ class: center, middle, inverse
 ### closer to 30,000,000   **300,000,000**     3,000,000,000
 
 ---
-class: center, middle, inverse 
+class: center, inverse 
 
-# so, total expenditures on food stamp program (not counting admin etc) is about:
+### so, total expenditures on food stamp program (not counting admin etc) is about:
 
-## 300,000,000 x .01 x $1000 = $30,000,000,000
+### 300,000,000 x .01 x $1000 = $30,000,000,000
 
 --
 ## $70,000,000 / $30,000,000,000 = **.2% of total expenditures** 
@@ -401,7 +304,7 @@ in fact, according to Washington Post, "The cost of providing nutritional assist
 ---
 # Unfair comparisons
 
-# You don't have to know anything about stats to see when things aren't being compared in a fair way
+### You don't have to know anything about stats to see when things aren't being compared in a fair way
 
 ---
 class: center, inverse
@@ -451,57 +354,19 @@ independent vs. dependent variable
 ---
 
 
-#[spurious correlations](http://tylervigen.com/spurious-correlations)
 
----
-
-
-how can we test?
-
-
----
 # averages
 
-## what is the avg class income
+### what is the avg class income?
 
 ![](https://tnuqq21kt870t8n1egkbrmbr-wpengine.netdna-ssl.com/wp-content/uploads/2014/10/Laptops_CH.jpg)
---
+
+---
 
 ## what about if this guy adds the class?
 
 
 ![](https://pbs.twimg.com/profile_images/669103856106668033/UF3cgUk4_400x400.jpg)
-
-
----
-**cooking the books with stats**
-.pull-left[
-CFO gets following earnings report
-
-
-Month| Amount earned
----- | -------------
-Jan  | $5,000
-Feb  | $5,000 
-Mar  | $5,000
-Apr  | $5,000
-May  | $5,000
-Jun  | $5,000
-Jul  | $5,000
-Aug  | $5,000
-Sep  | $5,000
-Oct  | $5,000
-Nov  | $5,000
-Dec  | $100,000
-]
-.pull-right[
-She concludes: 
-"hey, my avg monthly earning is ~$13,000!"
-
-![](https://www.washingtonpost.com/resizer/bmfQHooAGH6PmEv0qHjgf-ZUy-k=/480x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/EBULPVFULQI6PG4TXFYEHZL2EI.jpg)
-
---
-
 
 
 ---
@@ -543,12 +408,77 @@ The second problem with the Literary Digest poll was that out of the 10 million 
 
 https://www.jstor.org/stable/2749114?seq=1#metadata_info_tab_contents
 
----
 
-
-
-<iframe width="645" height="363" src="https://www.youtube.com/embed/_2u_eHHzRto" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ---
+class: center, middle, inverse
 
+# Course Topics  
+
+note: order might change as we work together on this
+---
+class: center, middle, inverse
+#  intro to the class <- hey, that's today!
+---
+
+class: center, middle, inverse
+# Overview of R
+
+##How to use/install/work with R
+
+---
+
+class: center, middle, inverse
+
+# Some history
+
+
+---
+class: center, middle, inverse
+# Working with data (data entry/storage)
+
+##This will talk about best practices for recording data. We will work with Excel and other spreadsheets and talk about common problems. 
+
+---
+# Data visualization 
+
+## How to make useful plots, graphs, etc.
+
+
+---
+class: center, middle, inverse
+# EDA
+
+## How to explore data to get a feel for it
+
+---
+class: center, middle, inverse
+# Descriptive Statistics 
+
+##mean, median, SD, 
+
+---
+class: center, middle, inverse
+#Statistical theory 
+
+#probability, hypothesis testing
+
+
+---
+class: center, middle, inverse
+#Model building
+
+## Modern methods of testing hypotheses 
+---
+
+class: center, middle, inverse
+
+# Applications
+
+## geostats, interactive graphs
+---
+
+# AsULearn
+
+![https://asulearn.appstate.edu/course/view.php?id=124857]
 

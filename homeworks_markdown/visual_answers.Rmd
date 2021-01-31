@@ -1,0 +1,62 @@
+---
+title: "visual_answers"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Answers
+
+```{r question  1}
+
+monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1,  fill="blue")
+
+```
+
+1.  put the legend on the bottom rather than on the right
+2.  label the x axis "tail length (cm)"
+3.  label the y axis "number of observations"
+4.  give it a title that is meaningful
+5.  put a credit somewhere that says who made the figure
+6.  change the legend so that it says "Monkey groups"
+7.  change the labels from "a" and "b" to "Group one" and "Group 2"
+8.  make a table to have at the back
+
+```{r  question 2: making the graph}
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') + theme(legend.position = "bottom") + labs(title = "monkey's from Naboombu", caption = "data collected by Jessica Jones", x= "tail lenght (cm)", y ="number of monkeys", fill = "groups") + scale_fill_discrete(breaks=c("a", "b"),
+                         labels=c("Group a", "group b"))
+```
+
+## [New visualizations]{.ul} 
+
+```{r question 3}
+ll_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_density(color="#e9ecef", alpha=0.6, position = 'identity')
+
+
+library(ggridges)
+
+ggplot(all_data, aes(x = tail_length, y = monkey_pop)) + geom_density_ridges()
+
+ggplot(new_data, aes(x = tail_length, y = monkey_pop, fill= monkey_pop)) + geom_density_ridges()
+
+ggplot(new_data, aes(x = tail_length, y = monkey_pop, fill= monkey_pop)) + geom_density_ridges(aes(alpha = .3))
+
+
+### box
+
+all_data %>%   ggplot(aes(tail_length, monkey_pop, fill = monkey_pop)) + geom_boxplot()
+
+all_data %>%   ggplot(aes( monkey_pop, tail_length, fill = monkey_pop)) + geom_boxplot()
+
+#violin
+
+all_data %>%   ggplot(aes( monkey_pop, tail_length, fill = monkey_pop)) + geom_violin()
+
+
+
+all_data %>%   ggplot(aes(monkey_pop, tail_length, fill = monkey_pop)) + geom_violin()+ geom_jitter()
+```

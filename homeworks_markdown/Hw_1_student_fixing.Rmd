@@ -1,0 +1,315 @@
+---
+title: "Homework #1"
+author: "Marc Kissel"
+date: "Due 2019-02-06"
+output:
+  pdf_document: default
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+# Homework info
+
+To do this homework:
+
+1. start R and start a new project. title it something useful
+2. open a new R script and title it LASTNAME_FIRSTNAME_HW1 (i.e. kissel_marc_HW1)
+3. follow along with the info below. For each question be sure to answer the question fully. you can either do  this in RMarkdown or in Word, Google Doc, etc.
+4. for now, bring in a printed copy of your homework. In the future we will try to submit these online.
+
+to keep track of where you are, use # to make a comment like this
+
+
+----------------
+
+### Question 1:
+_________________________
+The first thing we want to do is to learn how to run something in R. take a look at the code below:
+
+```{r}
+6 + 7
+```
+
+the part in grey is the code that is entered into R. if you copy that over to your r console and hit enter you should see the answer
+
+a. how can you send a command from the Source pane to the Console Pane?
+
+
+
+### Question 2
+______________________
+now lets learn how to do basic math. Using whatever sources you can think of, figure out how to add, subtract, divide, multiply, take an exponent (i.e. square a number), get the square root, find the absolute value
+
+solve the following using R and write down the correct code needed:
+
+#### a. 3-4
+#### b. 7 divided by 10
+#### c. 6 times 89
+#### d. 8 raised to the 7th power
+#### e. the square root of 52
+#### f. what is the absolute value of -53
+
+
+### Question 3
+___________________
+assigning variables:
+
+One of the key things you will do is assign a value to an object.
+
+to do this we use this symbol <-. 
+
+```{r example of assign}
+x <- 42
+```
+
+read the above like: "assign the value of 42 to the object x"
+
+
+a. How would you create a variable y and assign it the value 334
+b. how you you add the x and y together to get the sum of the two numbers?
+c. how would you create a new variable (x) that stores the result of x + y
+d. now, change the value of x to be 500 and see what happens when you add x + y together? if you ask for the value of x now what do you get? why?
+e. what are the rules for what the name of an object in R can be?
+
+
+### Question 4. types  of data
+______________________
+When you assign a value to a variable, it is given a specific *class*. the class is VERY important and is probably the #1 reason for having troubles with R. it is always good to check the class of an object. to do this, we can use a specific *function* in R called class
+####class types
+1. integers - 'natural numbers': 5, 6, 987
+2. numeric - decimal numbers: 4.5, 8.76666
+3. characters - text (sometimes called strings): "hello", "goodbye"
+4. logical - Boolean: True or False
+5. factors - categorical data. This is  different from characters because factors are given numbers (or *levels*) that are associated with that factor and then used for analysis.....we will come back to this later
+6.
+
+
+
+```{r}
+x <- 42
+class(x)
+```
+
+Note that the class of X here is numeric rather than an integer (which might not be want you expected). why? well, it has to do with some inside stuff on computer languages but in general R is going to store everything as numeric unless you tell it differently. In order to make  it be an integer we need to use a trick, which is to add the suffix L to the number
+
+```{r}
+xx <- 42L
+is.integer(xx)
+```
+
+
+
+a. assign my_value to be "hello". then check its class
+
+
+
+you can also ask R directly if something is a specific type. 
+
+```{r}
+my_value <- 1+ 3
+is.numeric(my_value)
+my_name <- "Marc Kissel"
+is.numeric(my_name)
+is.character(my_name) #and how!
+```
+
+
+b. below is some R code. guess what each type of object will be and then use R to find the answer
+
+
+```{r}
+a <- 1.333
+b <- TRUE
+c <-  "my name is"
+d <- Sys.Date() # tricky
+```
+
+remember:: A class defines what kinds of operations can be implemented on an object & how a function will return a value. 
+It is important to keep track of the classes of your objects. Class mistakes are probably the most common kind of problem in R
+
+### Question 5: Vectors
+________________________
+so far we have only stored one value into an object. but most of the time we are going to have to work with a lot of data. say you have a series of numbers and want to add 7 to each of them. it would be a pain to have to do that manually. we can use  r to store a series of values (called a *vector*)
+
+```{r}
+my_vector <- c(1,2,3,4,5)
+my_new_vector <- c(6,7,8,9,10)
+```
+
+
+
+let's say you are doing some research and want to record the biological sex of the skeletons in your study. after analyzing them you decide that this is the correct designation
+
+male
+male
+female
+male
+female
+female
+female
+
+a. make a new object called **my_study** and make it a vector of the recorded biological sex
+b. print the object to R
+
+```{r include=FALSE}
+my_study <- c(1,2,3,4,5,6, 7)
+```
+
+
+congrats! you now have a *vector*! 
+
+lets say you want to figure out how what the sex of the 5th skeleton is. you could print the object and count, but that takes time and an get difficult. R makes things easier for people like me who are lazy and what the computer to do it all.
+
+to get an *element* from a list we  use square brackets
+
+my_study[2] # gives you the second element in the vector
+
+
+c. how would you get the sex of the third skeleton?
+
+d. can you figure out how, in one line of code, to get the sex of the 1st and 4th skeleton?
+
+
+OK, but it is kinda confusing what these stand for. you know that they are skeletons 1-7, but maybe someone else doesn't. We can assign names to objects  using a special function called *names*
+
+```{r}
+names(my_study) <- c("one", "two", "three", "four", "five", "six", "seven")
+```
+
+d. print my_study now and see how it differs. What did the *names* function do
+
+Note: now that they have names we can also get the values that way
+
+```{r, eval=F, echo=T}
+my_study[2]
+my_study["two"]
+#these are the same
+
+my_study[2] == my_study["two"] # the '==' asks R to tell you if the value on the left and the value on the right are the same....
+```
+
+
+to be fair, most of the time there are easier ways to name things, but having a basic understanding of how R works helps a lot
+
+### Question 6: matrices
+____________________________
+a vector is simply a list of numbers
+a matrix is  a **rectangular** array of numbers
+
+```{r chimp age dist data from Jamie Jones, eval=F, echo=T}
+cx1980 <- c(7, 13, 8, 13, 5, 35, 9)
+cx1988 <- c(9, 11, 15, 8, 9, 38, 0)
+chimp <- cbind(cx1980, cx1988) # cbind binds the vectors together a columns
+class(chimp)
+chimp
+```
+
+
+one thing you want to learn is how to read a matrix and identify elements
+lets say you want to get a vector of just the ages from 1980. we can use the square brackets again but need to know a trick. 
+
+
+
+```{r, eval=F, echo=T}
+chimp[1,] #note the comma
+chimp[,1]
+#putting the number before the comma gets us the row. putting it after the comma gets column. 
+#one way to remeber that Rows come first is the menominc Railway Cars
+chimp[3,2] # third row, second column
+```
+
+
+a. how would you make a matrix by row rather than column (use Google if need be)
+
+b. There are others ways to make a matrix
+look at the code below and figure out how it works
+
+```{r another way to make a matrix, eval=F, echo=T}
+freq <- c(32,11,10,3,  38,50,25,15,  10,10,7,7,  3,30,5,8)
+hair <- c("Black", "Brown", "Red", "Blond")
+eyes <- c("Brown", "Blue", "Hazel", "Green")
+freqmat <- matrix(freq, nr=4, nc=4, byrow=TRUE)
+dimnames(freqmat)[[1]] <- hair
+dimnames(freqmat)[[2]] <- eyes
+freqmat
+```
+
+
+now, create your own matrix with madeup data...
+
+
+### Question 7: data frame
+_________________________
+
+a dataframe stores data! it can hold different kinds of variables/classes so it is different from a matrix. You can think of it as a list of variables that are all the same length. Data frames are probably the most common way we will work with R
+
+
+```{r, eval=F, echo=T}
+bone <- c("humerus", "radius", "ulna", "femur", "tibia", "fibula")
+size_inches <- c(14.4, 10.4, 11.1, 19.9, 16.9, 15.9)
+injury <- sample(c("yes","no"),6,replace=TRUE)
+sample_letter <- LETTERS[1:6]
+my_sample <- data.frame(bone, size_inches, injury, sample_letter)
+my_sample
+
+```
+
+If you use the function View you can see a spreadsheet of the data frame you just made
+
+```{r, eval=F, echo=T}
+View(my_sample)
+```
+
+you can view a specific column/vector using the $
+
+```{r, eval=F, echo=T}
+my_sample$bone
+```
+
+
+
+a.  run the code below. it should show an error. Why? rewrite the code so it works!
+
+```{r dataframe fix, eval=FALSE}
+num <- c(1,2,3,4,5)
+food <- c("bread", "butter", "milk", "cheese","coffee", "tea")
+quantity <-  c(1,1,3,5,7,1)
+shopping <- data.frame(num, food, quantity)
+```
+
+b. what is the class type of the different vectors in the my_sample  dataframe?
+
+### Question 8: comparing values
+_________________________________
+
+often times we are going to want to compare things. 
+
+
+a. run the code below
+
+```{r comparing values}
+a <- 5
+b <- 9
+c <- 7
+d <- sqrt(49)
+```
+
+Now,  figure out how to have R evaluate the following:
+- is a bigger than b?
+- is c equal to d (careful with this one..)
+- is c less than or equal to b?
+
+b. make a new vector called *temp* with the values of 1,5,7,9,11,14,6,8. then write a single line of code that evaluates if 3 is greater than each of the values in the vector
+
+c. how would you ask R if the 5th value in  *temp* is larger than 5?
+
+
+
+

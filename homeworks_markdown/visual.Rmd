@@ -1,0 +1,335 @@
+---
+title: "visual"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Making plots
+
+[Story]{.ul}
+
+You are working with a professor of anthropology at Fancypants University. She has just discovered a new species of monkey that she wants you to collect data on. So you are off to the island of Naboombu, where you will be given the task of watching these primates.
+
+## [Collecting your data, part 1]{.ul}
+
+When you arrive you notice that there are a whole lot of monkeys here and you need to find a way to get an idea of what they look like. So you and your team decide to start by measuring their tails (they aren't apes!). you manage to measure 500 of these fellas (ok, this is a bit of a reach but lets say that you are *really* quick at measuring)
+
+run the following R code to get the first monkey data!
+
+```{r get data on tails}
+library(tidyverse)
+tail_length <-rnorm(500,57,2)
+sample_number <-1:500
+monkey_pop <- rep(letters[1], 500)
+monkey_data_1 <- tibble(sample_number, tail_length, monkey_pop)
+
+monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1)
+```
+
+You call your professor and she is **so happy** to hear your good news. But she wants the data in be visualized. Run the following code to make a histogram.
+
+```{r first histogram}
+monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1)
+```
+
+Ok, but she wants the histogram to be blue. How can you add to the code below to make it blue?
+
+```{r Question 1}
+
+# change the code to make the histogram blue
+monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1)
+
+
+```
+
+After sending your data to your professor you hear about another group of monkeys on a different part of the island run the code below to get that data and make a histogram!
+
+```{r gorup b data}
+
+tail_length <-rnorm(500,52,2)
+sample_number <-501:1000
+monkey_pop <- rep(letters[2], 500)
+monkey_data_2 <- tibble(sample_number, tail_length, monkey_pop)
+
+monkey_data_2 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1)
+```
+
+Now you want to look at both of the populations at the same time! fortuently you have taken this class and have some R code ready to do this
+
+```{r all data}
+all_data <- bind_rows(monkey_data_1, monkey_data_2)
+
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity')
+```
+
+So you look at this and think to yourself "hey, they overlap a bit but there are difference at the tails. I am going to send this to my adviser and she will be soooooo happy!"
+
+a few hours later you get an email with these requests. Your adviser wants you to do all of the following to the figure you have made
+
+1.  put the legend on the bottom rather than on the right
+2.  label the x axis "tail length (cm)"
+3.  label the y axis "number of observations"
+4.  give it a title that is meaningful
+5.  put a credit somewhere that says who made the figure
+6.  change the legend so that it says "Monkey groups"
+7.  change the labels from "a" and "b" to "Group one" and "Group 2"
+8.  
+
+TODO
+
+<https://www.r-graph-gallery.com/density_mirror_ggplot2.html>
+
+lets take this step by step. copy the below R code and use each step to build the new graph. If you need help use the class readings or ask on Discord!
+
+```{r base graph}
+
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity')
+```
+
+OK, phew! you have this all ready to go...but then your prof calls you and says "we need to make sure that the text is SSSSSs"
+
+ssssss
+
+[Bonus]{.ul}
+
+1.  put an image behind it
+
+2.  make a table to have at the back
+
+## [New visualizations]{.ul} 
+
+Your adviser now asks if you can make the plots with a different geom
+
+1.  make a density plot
+2.  make a ridgeline plot
+3.  make a boxplot
+4.  make a violin plot
+
+```{r}
+new_data %>%   ggplot(aes( monkey_pop, tail_length, fill = monkey_pop)) + geom_violin()
+
+
+new_data %>%   ggplot(aes(monkey_pop, tail_length, fill = monkey_pop)) + geom_violin()+ geom_jitter(height = 0, width = 0.1)
+```
+
+## [New data]{.ul}
+
+You and your professor submit your data to a journal. After a few weeks you get your peer review back and the reviewers say "wow, this is cool! but ya know what, we think you need more measurements before we can conclude these are 2 different populations. can you go and measure ear length?"
+
+Run the following code to get the new_data
+
+```{r ear data}
+
+ear1 <- rnorm(500, 4.4, .22)
+ear2 <- rnorm(500, 6.3, .31)
+
+ear1 <-tibble(ear =rnorm(500, 4.4, .22), monkey_pop = rep(letters[1], 500), sample_number = 1:500)
+
+
+ear2 <-tibble(ear =rnorm(500, 6.3, .31), monkey_pop = rep(letters[2], 500), sample_number = 501:1000)
+
+ear_all <- bind_rows(ear1, ear2)
+
+new_data <- all_data %>% left_join(ear_all, by= c("monkey_pop", "sample_number"))
+
+
+```
+
+Since you know have two measurements on each monkey you need a new way to visualize these data. Remembering what you learned at AppState you go and make a scatterplot
+
+```{r scatter}
+
+new_data %>%   ggplot(aes(tail_length, ear)) + geom_point()
+
+new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop)) + geom_point()
+```
+
+she comes back and asks for the following updates
+
+1.  put a label on group a
+2.  get rid of the legende
+3.  ddd
+
+## interactive
+
+you paper has been accepted but the editors want it slected for speiacl feature that requires an intearci comonet
+
+```{r interactive}
+
+library(plotly)
+
+p <- new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop)) + geom_point()
+
+ggplotly(p)
+
+
+
+```
+
+add sample nuber:
+
+```{r}
+
+p <- new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop, label= sample_number)) + geom_point()
+
+ggplotly(p)
+
+```
+
+make it look pretty
+
+```{r}
+library(glue)
+
+
+
+p <- new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop, text = glue('sample is: {sample_number}'))) + geom_point()
+
+
+```
+
+## export the data
+
+she wants the whole dataset
+
+```{r}
+write_csv(new_data, "my_monkeydata.csv")
+```
+
+change the name of the csv file?
+
+change the format to ....
+
+## what else can you do with this data
+
+Now, you got the paper published and got your Ph.d :)
+
+so you want to do your own thing...using the code above 'collect' some data on new traits and then do something new
+
+```{r make some new fake data}
+
+```
+
+# other things (move to another homework?)
+
+look back at your monkey data (here I WILL ADD MORE THINGS
+
+it is wide, lets make it long
+
+```{r pivot}
+
+```
+
+what else can we do?
+
+summary stats?
+
+We need the mean of the taisl...
+
+SSSSSSSS
+
+sssss
+
+lets do it the long way
+
+```{r}
+total <- sum(new_data$tail_length)
+len <- length(new_data$tail_length)
+total/len
+```
+
+lets make our first funciton
+
+```{r}
+find_mean <- function(data){
+  a <- sum(data)
+  b <- a/length(data)
+  return(b)
+}
+find_mean(new_data$tail_length)
+```
+
+hey, we just made our firt function!!!!
+
+(of coure, R has a buitl in mean fucito..but dont tell your prof that..let her think you are just asweomd!
+
+but here is a trciky thing.we have a sample mean not the populaiton mean. that is cause this is just an esiamte to fhte true mean.
+
+your prof was smart when she asked for 500 monkeys. the more smaples the closer your sample reaches to the population.
+
+here is an inteartie veriosn that shows this well (doesnt work)
+
+```{r}
+library(emdbook)
+library(plotly)
+library(here)
+
+m <- list(
+  l = 50,
+  r = 50,
+  b = 10,
+  t = 10,
+  pad = 4
+)
+accumulate_by <- function(dat, var) {
+  var <- lazyeval::f_eval(var, dat)
+  lvls <- plotly:::getLevels(var)
+  dats <- lapply(seq_along(lvls), function(x) {
+    cbind(dat[var %in% lvls[seq(1, x)], ], frame = lvls[[x]])
+  })
+  dplyr::bind_rows(dats)
+}
+
+d <- do.call(rbind, lapply(lseq(10,10000, 300), function(x){
+	d <- data.frame(x=rnorm(x), frame=x/300, N=x)
+	return(d)
+}))
+
+dd <- aggregate(data=d, x~frame+N, FUN=mean)
+%>% accumulate_by(~N)
+
+p <- dd %>% plot_ly(x=~log10(N), y=~x, frame=~frame, type="scatter", mode="lines", line = list(simplyfy = F, color="orangered"),width=550, height=350)%>% 
+ animation_opts(
+    frame = 10, 
+    transition = 0, 
+    redraw = FALSE
+ ) %>% 
+config(displayModeBar = F) %>%
+  layout(
+    xaxis = list(
+      title = "Sample Size (log10)",
+      zeroline = F
+    ),
+    yaxis = list(range=c(-0.7,0.7),
+      title = "Mean",
+      zeroline = F
+    ), autosize=F, margin=m
+  ) %>%
+  animation_slider(
+    hide = T
+    )%>%
+  animation_button(
+    x = 1, xanchor = "right", y = 0, yanchor = "bottom"
+  )
+```
+
+<https://tinystats.github.io/teacups-giraffes-and-statistics/04_variance.html>
+
+<https://github.com/tinystats/teacups-giraffes-and-statistics/blob/master/04_variance.Rmd>
+
+## spread
+
+variance
+
+strat with popualtoi var
+
+## diet
+
+ok, you now need info on diet so you get info on how much food they eat and their body size.
+
+we want to look at the covariance
