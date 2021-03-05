@@ -42,23 +42,22 @@
   --header-h3-font-size: 1.75rem;
 
   /* Colors */
-  --text-color: #000000;
-  --header-color: #035AA6;
-  --background-color: #FFFFFF;
-  --link-color: #035AA6;
-  --text-bold-color: #035AA6;
+  --text-color: #18273F;
+  --header-color: #23395b;
+  --background-color: #E9EBEE;
+  --link-color: #23395b;
+  --text-bold-color: #23395b;
   --code-highlight-color: rgba(255,255,0,0.5);
-  --inverse-text-color: #000000;
-  --inverse-background-color: #03A696;
-  --inverse-header-color: #000000;
-  --title-slide-background-color: #035AA6;
-  --title-slide-text-color: #FFFFFF;
-  --header-background-color: #035AA6;
-  --header-background-text-color: #FFFFFF;
-  --primary: #035AA6;
-  --secondary: #03A696;
-  --white: #FFFFFF;
-  --black: #000000;
+  --inverse-text-color: #E9EBEE;
+  --inverse-background-color: #23395b;
+  --inverse-header-color: #E9EBEE;
+  --title-slide-background-color: #23395b;
+  --title-slide-text-color: #E9EBEE;
+  --header-background-color: #23395b;
+  --header-background-text-color: #E9EBEE;
+  --base: #23395b;
+  --white: #E9EBEE;
+  --black: #18273F;
 }
 
 html {
@@ -99,10 +98,10 @@ h1, h2, h3 {
 }
 .remark-inline-code {
   font-size: var(--code-inline-font-size);
-  color: #035AA6;
+  color: #23395b;
 }
 .remark-slide-number {
-  color: #035AA6;
+  color: #23395b;
   opacity: 1;
   font-size: 0.9em;
 }
@@ -133,8 +132,6 @@ a, a > code {
 }
 .title-slide {
   background-color: var(--title-slide-background-color);
-  background-image: url("https://ssdp.org/wp-content/uploads/2018/01/app-state-blog-pic.jpg");
-  background-size: cover;
 }
 .title-slide .remark-slide-number {
   display: none;
@@ -146,10 +143,10 @@ a, a > code {
   float: left;
 }
 .left-column h2, .left-column h3 {
-  color: #035AA699;
+  color: #23395b99;
 }
 .left-column h2:last-of-type, .left-column h3:last-child {
-  color: #035AA6;
+  color: #23395b;
 }
 .right-column {
   width: 75%;
@@ -171,7 +168,7 @@ img, video, iframe {
   max-width: 100%;
 }
 blockquote {
-  border-left: solid 5px #03A69680;
+  border-left: solid 5px #23395b80;
   padding-left: 1em;
 }
 .remark-slide table {
@@ -186,7 +183,7 @@ th, td {
   padding: 5px;
 }
 .remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) {
-  background: #CCEDEA;
+  background: #D3D7DE;
 }
 table.dataTable tbody {
   background-color: var(--background-color);
@@ -196,7 +193,7 @@ table.dataTable.display tbody tr.odd {
   background-color: var(--background-color);
 }
 table.dataTable.display tbody tr.even {
-  background-color: #CCEDEA;
+  background-color: #D3D7DE;
 }
 table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.5);
@@ -236,17 +233,11 @@ table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   }
 }
 
-.primary {
-  color: var(--primary);
+.base {
+  color: var(--base);
 }
-.bg-primary {
-  background-color: var(--primary);
-}
-.secondary {
-  color: var(--secondary);
-}
-.bg-secondary {
-  background-color: var(--secondary);
+.bg-base {
+  background-color: var(--base);
 }
 .white {
   color: var(--white);

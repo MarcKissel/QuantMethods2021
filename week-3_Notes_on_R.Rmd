@@ -1,0 +1,486 @@
+---
+title: "R live- day 1"
+author: "Marc Kissel"
+date: "Feb 1, 2021"
+output:
+  html_document: default
+  pdf_document: default
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Intro section
+
+## [Why use R]{.ul}
+
+it is more than just a way to run statistics. You can make nice figures,
+create documents like this one, run computer simulations, create
+interactive apps, and even [make a
+website](https://marckissel.netlify.app/ "my site")!
+
+I don't know where i read this analogy, but it helps to think of R
+compared to SPSS, Excel, etc as looking at the difference between taking
+a bus and driving a car. Taking a bus is easy and carefree & it gets you
+from point A to point B. But there is not much freedom in where you go.
+With a car you can go anywhere, but you have to learn how to drive and
+pay attention during the trip. In R you can do almost anything with your
+data. But it takes some time and effort...though i think it is worth it!
+
+## [How to get help]{.ul}
+
+No one knows everything about R. I often Google the same issue many
+times since i forget. A great place to look for help is [Stack
+Overflow](https://stackoverflow.com/). If you are on Twitter, lots of
+great folks follow the
+[\#Rstats](https://twitter.com/search?q=%23rstats). Often, I find the
+best way to Google it is to take the thing you want to know and add
+"rstats" to the end or the name of the package i'm using. So, if i
+wanted to change the background color of a plot "ggplot2 background
+color" brings up a link to a stackoverflow discussion on it.
+
+Also, most packages have help online. Some even have tutorials or
+vignettes. I like to run through the online tutorial of a new package
+since it helps me to figure out what is going on.
+
+A short warning: if you ask a question online be prepared to give
+details on your question. It might be better to ask me first and if i
+don't know the answer i can help you get your question into a format
+that allows others to help you!
+
+# [Working with R]{.ul}
+
+The *console* is where commands are run in RStudio. You can write
+something in the console to speak directly to R, or write in the
+*source* and then send the script to the console. You can recognize the
+console since every lines starts with a '\>'
+
+go to the console and type the following and then hit enter
+
+```{r}
+7 + 6
+```
+
+you should see something like this:
+
+> 7 + 6 [1] 13
+
+note the [1], which tells you the line number. This becomes useful later
+on. Also note it told you that 7 + 6 = 13.
+
+## [Short overview of how R works]{.ul}
+
+One way that i think about R that helps me to work it is to remember
+that everything in R is an "object." What this means is that in R we
+make objects (or we assign values to objects) and then do things to
+these objects. for example check out the code below
+
+```{r assign value}
+a <- 4
+
+```
+
+What this says is that we are going to create the object '**a**' and
+then assign the value '4' to it. If you run the code in R Studio you
+will see that the 'environment' panel now lists 'a' and gives its value.
+
+> **The arrow shortcut key for a pc is "alt" + "-"". For a mac it is
+> "Option" + "-"**
+
+```{r objects}
+b <- "my name"
+c <- FALSE
+d <- c(1,2,3.0,4)
+```
+
+> **protip:** When you assign values to objects, be aware that not all
+> names are possible. R reserves some names for special functions. here
+> are the rules
+>
+> 1.  Can use letters/numbers, but the object has to start with letter
+>     (impt for when you import data).
+> 2.  no spaces, so use CamelCase or Snake_case
+
+[**to store more than one element in an object we need to remember a
+trick**]{.ul}
+
+if you want to make a series of numbers, characters, whatever, you need
+to use a special sequence. To do this, we must combine the values we
+want to assign with the c function, which combines values into a vector!
+
+```{r}
+my_list <- c(1,2,3,4,5)
+my_list_2 <- c("my_name", "my_address", "my_number")
+```
+
+## [Using objects]{.ul}
+
+Once you assign *something* (e.g., a value, a list of numbers, a
+character vector) to a object you can interact with that object. We do
+this by using what is called a **function**. A function is a built-in R
+command that does things to objects. Functions take what we call
+**arguments**.
+
+To call a function in R you write the name of the function and then put
+the arguments of that function in parenthesis. Each argument is
+separated by a comma. Some functions have one argument but many have
+more. Often, the arguments have default values which means you don't
+have to specify what that is. For example the **mean()** function
+defaults to na.rm = False, which means it won't automatically remove
+missing values. Oftentimes you might want to skip the missing values, so
+you would add na.rm = TRUE
+
+R read "NA" as standing for missing values. However, it is counted as an
+entry. so if you have NA values you need to remember to tell R to skip
+those if calculating the mean
+
+```{r functions}
+sum(d)
+mean(d)
+mean(d, na.rm = FALSE) #doesn't change result since we have no NAs yet
+e <- c(1,2,3,4,NA,5)
+mean(e)
+mean(e, na.rm = TRUE)
+seq(from = 1, to = 10, by =2)
+
+```
+
+if you need help on a function, you can type a question mark before its
+name like this: ?mean()
+
+The way in which you can interact with the object is based on the
+*class* of the object. The class of the object is assigned by R based on
+what it thinks the object is supposed to be.
+
+```{r}
+class(a)
+class(b)
+class(c)
+class(d)
+```
+
+In this case, the function is 'class' and the argument is the object
+whose class you want to know.
+
+## [Class]{.ul}
+
+A **class** defines what kinds of operations can be implemented on an
+object & how a function will return a value. It is important to keep
+track of the classes of your objects. Class mistakes are probably the
+most common kind of problem in
+
+Once you have an object stored, you can interact with it but remember
+that the way you interact with it via functions depends on its class....
+
+```{r}
+length(my_list)
+length(my_list_2)
+sum(my_list)
+my_list[4] #gets the 4th value.
+#sum(my_list_2) this kicks back an error
+```
+
+running the second line gives you a message like this:
+
+"Error in sum(my_list_2) : invalid 'type' (character) of argument"
+
+What this means is that the 'type' or 'class' of the object is not
+something that the sum function knows what to do with.
+
+[**Learning how to read R errors is useful.**]{.ul}
+
+If you don't know what the error means, copying part of it and searching
+Google is a pretty good way to find help.
+
+(*short digression: one of the things about R that makes it easier to
+use is that many of the functions work by first checking out the class
+of the object you are asking it to work on. What this means is that the
+same function can be applied to different types of classes. This doesn't
+really affect much now, but as you investigate R more you can see how
+this works*.)
+
+## [Starting a project]{.ul}
+
+1.  best advice i can give is that you want everything to be in one
+    place (makes things a bit harder at first)
+
+2.  this is what R Projects are for
+
+3.  start a new project and store all your data there (see handout from
+    Week 1)
+
+4.  when you start/open a project, it sets R's working directory to that
+    folder. This way, you can easily locate things
+
+## [Packages]{.ul}
+
+R comes with many functions already installed. But what makes it super
+powerful is that people can add to these functions by writing their own
+(and we will write our own function in week 7!). A bunch of functions
+bundled together is called a **Package**. You are going to find lot of
+useful packages as you us R. To install a package in R we use the
+function "install.packages," which has the argument the name of the
+package.
+
+install.packages("name_of_package") \#install a package
+library(name_of_package) \#load the package for your session
+
+```{r}
+#install.packages("tidyverse")
+
+```
+
+you only have to install a package once, but [**everytime you reopen R
+you have to reload the pacakage with the library function**]{.ul}
+
+```{r}
+library(tidyverse)
+```
+
+In the case of this package, R tells us what is being loaded and also
+that there are some conflicts. We can usually ignore these, but
+basically it just says that some functions from this new package have
+the same name as functions from the base R package. Good to pay
+attention to but usually not a huge problem unless you are doing a lot
+of things in one script
+
+Here is a short piece of code that might make some sense. It calls a
+function ggplot (part of the tidyverse package), and then makes a plot.
+Then the ggsave function saves the new plot as a pdf in the working
+directory of the project folder.
+
+the last line takes the data set that was used (diamonds) and write as
+CSV file for that.
+
+```{r}
+ggplot(diamonds, aes(carat, price)) + 
+  geom_point()
+ggsave("diamondPlot.pdf")
+write_csv(diamonds, "diamonds3.csv")
+```
+
+# [How to get data into R]{.ul} 
+
+Probably the hardest part of starting to use R is getting your data into
+R and then being able to work with it fluidly. This has gotten easier
+over time but still can be tricky. For me, the biggest hurdles are
+
+1.  getting the file in a good format (which is next week's work!)
+
+2.  making sure that when it is read into R all of the data is being
+    read correctly by R
+
+    ## Using readr
+
+The readr package is part of the tidyverse package. One of the points of
+the tidyverse is to try to make things consistent.
+
+Here are some of the functions to read data into R
+
+read_csv - comma separated values
+
+read_csv2() - semicolons
+
+read_fwf() - fixed width
+
+For all of these the first argument is the file name. Other arguments
+can be used to if need be. For example, use "col_names = FALSE" if no
+headers to your data (uncommon)
+
+What is nice about read_csv etc is that it tells you what it **thinks**
+that class of each column is
+
+For more info check this out:
+
+<https://readr.tidyverse.org/> or
+<http://r4ds.had.co.nz/data-import.html>
+
+You can also use the 'import data set' tool which lets you 'point and
+click' and then generates the code. This is helpful and probably
+something i should use more often
+
+### Things to be aware of when importing data into R
+
+As we talked about, the biggest problem is dealing with factors. factors
+are categorical data. In the old days R used to import any string as a
+factor. This caused some problems! Now, readr fixes this. But we still
+need to be aware of how factors work. The following code, taken mostly
+from <http://www.ats.ucla.edu/stat/r/modules/factor_variables.htm> gives
+a workthough on what factors are and how to think about them.
+
+We are going to start by making a new object and then turning it into a
+factor. then play around with this new factor to see how it works
+
+\#\#\#Factors
+
+```{r factors}
+
+
+
+set.seed(100) #this sets the randomizer so if you run this code you get the same results i did
+temp <- sample(0:1, 20, replace=T)
+temp
+
+is.factor(temp)
+is.numeric(temp)
+#ok, so we now have a list of numbers
+#remember that factors are categories
+#so, we are going to assign factors to these values
+#uses the argument labels
+temp_f <- factor(temp, labels = c("femur", "tibia"))
+temp_f #hey, that is kinda cool! lets check if it still numeric
+is.numeric(temp_f)
+is.factor(temp_f) #sweet!
+#so that works with numbers, but what about strings
+
+size <- c("small", "medium", "small", "small", "small", "small", "medium", "small",
+          "medium", "medium", "medium", "medium", "medium", "tall", "tall",
+          "small", "medium", "medium", "small", "tall")
+is.factor(size)
+is.character(size)
+#ok, so how do we turn this into a factor? lets what we did before
+size_f <- factor(size)
+is.factor(size_f)
+size_f #but lets take a closer look at the levels..
+?levels #read the help here and try to see what it does
+levels(size_f)
+# ok, so notice the order of the levels. here, they are sorted alphabetically
+#this might not be what you want (in fact, it rarely is.). I've had many
+#issues with R that comes down to this problem. Dplyr/ggplot makes it a little
+#easier, but you still going to have problems
+#so, how to fix this:
+
+#we need to set the levels!
+size_f2 <- factor(size, levels=c("small", "medium", "tall"))
+
+#the above code says somthing like "take the size vector and set the levels so that are in this order: small, medium, tall
+
+is.factor(size_f2)
+levels(size_f2) #woot. they are now in the right 
+
+###
+#sometimes you might need to use ordinal data. for that we use ordered factors
+#note: ordinal data is when we the order of the values matters,
+#but we can't say how much of a difference there is between each.
+#the data is ranked but the distance between categories isn't clear
+#so, if we are measuring something like job satisifaction
+#hard to say how much better 'very happy' is from 'happy'
+#e.g. likert scale
+
+size_ordered <-  ordered(size, levels =c("small", "medium", "tall"))
+size_ordered
+size_f2
+#note in size_ordered you see the '<' 
+
+table(size)
+table(size_ordered)
+
+#the last thing i want to mention is adding data. now,
+#you might think this is easier to do in excel
+#but remember that R has the plus of perserving
+#all you steps. Plus, this way you aren't messing with
+#the original data
+
+size_f2[21] <- "very.tall"
+#we get an error message. note it says 'invalid factor'
+size_f2 
+#there is now a NA. this is cause R doesn't know how to deal 
+#with the new factor
+#we need to add the new factor
+size_f2 <- factor(size_f2, levels = c(levels(size_f2), "very.tall")) #ok, so this
+#is a bit long. but levels is the same. just cheating a bit by usinf the levels(size_f2)
+#function to get the original levels from the list. As you getbetter w/ R
+#you learn these little tricks to help. avoids making mistakes...
+size_f2
+size_f2[21] <- "very.tall"
+####ok, but lets say we don't want 'very tall' anymore. This could become
+#problem when making images since it may still show up even if we just
+#remove it
+#first, we get rid of the elements we dont want
+size_f2_new <- size_f2[size_f2 != "very.tall"]
+#then, we 'refactor' it
+size_f2_new <- factor(size_f2_new)
+size_f2_new
+#note the difference between the 2 tables
+table(size, temp)
+table(size_f2_new, temp_f)
+
+
+#finally, lets put it all together
+data <- c(34, 39, 63, 44, 47, 47, 57, 39, 48, 47, 34, 37, 47, 47, 39, 47, 47, 50, 28, 60)
+
+my_data <- data.frame(temp, temp_f, size, size_f2_new, data)
+my_data
+```
+
+That was a bit much, i know. It took me a long time to get a handle on
+this stuff. Factors are notorious for being the worst part of R. Come
+back to this section later in the class when you are having issues and
+hopefully it makes more sense then!
+
+### F[actors in the tidyverse (see <http://r4ds.had.co.nz/factors.html> for more on working with factors in R)]{.ul}
+
+#### 1. reorder factors.
+
+Often when making plots we want to change the order they appear in. One
+was is shown above. Another way is to use the forcats package that comes
+with the tidyverse. it comes with an interesting dataset that, among
+other things, tell us the avg daily hours someone watches tv based on
+their religion
+
+lets set the data up:
+
+```{r}
+library(tidyverse) # be sure to load the package
+relig_summary <- gss_cat %>%
+  group_by(relig) %>%
+  summarise(
+    age = mean(age, na.rm = TRUE),
+    tvhours = mean(tvhours, na.rm = TRUE),
+    n = n()
+  )
+
+ggplot(relig_summary, aes(x = tvhours,  y= relig)) + geom_point() # this function ggplot takes a lot fo arguments and we will work on it soon. for now note that we give it the X and Y axis and then tell it to make a point graph 
+```
+
+when we plot this the factors are not organized by tv hours, which makes
+it hard to examine.
+
+We can improve it by reordering the levels of relig using fct_reorder().
+
+fct_reorder() takes 2 main arguments:
+
+1.  the factor we want to reorder
+
+2.  the numeric vector we want to reorder by
+
+```{r}
+ggplot(relig_summary, aes(tvhours, fct_reorder(relig, tvhours))) + 
+  geom_point()
+```
+
+#### rename factors
+
+In the Tidyverse it is easy to rename factors using the function
+fct_recode()
+
+```{r}
+gss_cat %>%
+  mutate(partyid = fct_recode(partyid,
+                              "Republican, strong"    = "Strong republican",
+                              "Republican, weak"      = "Not str republican",
+                              "Independent, near rep" = "Ind,near rep",
+                              "Independent, near dem" = "Ind,near dem",
+                              "Democrat, weak"        = "Not str democrat",
+                              "Democrat, strong"      = "Strong democrat"
+  )) %>%   count(partyid)
+```
+
+# [More on the Tidyverse]{.ul}
+
+Next week i'll do more on this. For now this should help you with the
+homework and getting ready to work with R.

@@ -31,19 +31,17 @@ mono_light(
 
 ##Goal is to summarise data in easily understood fashion
 
-##to do:
-____________________
 
-
-```{r load what we need, warning=FALSE, include=FALSE}
+```{r load what we need, warning=FALSE, include=TRUE}
 #install.packages("lsr")
+#install.packages("psych")
 library(lsr)
 library(tidyverse)
 library(psych)
 load("aflsmall.Rdata")
 ```
 
-
+https://tomfaulkenberry.github.io/JASPbook/chapters/chapter4.pdf   
 
 ???
 afl.margins variable contains
@@ -57,32 +55,23 @@ played during the period 1987 to 2010. Let's have a look at the afl.margins vari
 ```{r}
 print(afl.margins)
 ```
-
----
 ##point is that the output isn't very useful. we can't just look at data and figure out what is happening
 
 
 ---
-#Central Tendency
-______________________
-
-##what is the **middle** of your data?
-
-#1. mean
-#2. median
-#3. mode
-
----
 ##Sample vs. population 
 
-A population is the entire group that you want to draw conclusions about, while the  sample is the specific group that you will collect data from.
+- A population is the entire group that you want to draw conclusions about, while the  sample is the specific group that you will collect data from.
 
-i.e. the population can be the undergrads in the US but the sample might be 150 students in a gened course at AppState
+- i.e. the population can be the undergrads in the US but the sample might be 150 students in a GenEd course at AppState
 
-Population: scores on an exam in a class
+- Population: scores on an exam in a class
 
 
-*parameter* is a measure that describes the whole population. A *statistic* is a measure that describes the sample.
+###Note
+- *parameter* is a measure that describes the whole population. 
+
+- A *statistic* is a measure that describes the sample.
 
 ---
 
@@ -91,24 +80,33 @@ Population: scores on an exam in a class
 ---
 #Sampling error
 
-A sampling error is the difference between a population parameter and a sample statistic. In your study, the sampling error is the difference between the mean political attitude rating of your sample and the true mean political attitude rating of all undergraduate students in the Netherlands
+- A sampling error is the difference between a population parameter and a sample statistic. For example, the sampling error is the difference between the mean political attitude rating of your sample and the true mean political attitude rating of all undergraduate students
+
+
 
 
 
 ---
-##Sampling homework
+###An average is the value that best represents an entire group
 
-we will work on this in a way to learn how sampling works via fiugin out the lenght of the avg word in Gettysburg address
+###Central Tendency
+______________________
+
+##what is the **middle** of your data?
+
+#1. mean
+#2. median
+#3. mode
+
 
 
 ---
 # The Mean
 
 ### this is the average as we learned in math class. Take all the values and divide  by the total number of values
-____________________
 
 
-
+???
 N = number of observations
 $$X_1=  first observation $$
 
@@ -213,12 +211,9 @@ observations are larger.
 ---
 # some tips
 
-##If data are **nominal** then prob not use mean or median
-##If data are **ordinal** scale, prob use median. the precise numbers dont matter
+###If data are **nominal (categorical)** then prob not use mean or median
 
-##In general, it depends on what you want to  do
-
-#For income, we tend to use the median rather than the mean.
+##For income, we tend to use the median rather than the mean.
 ###*why?*
 
 http://www.abc.net.au/news/stories/2010/09/24/3021480.htm
@@ -274,7 +269,7 @@ table( afl.finalists )
 
 #which is the mode?
 
-???
+---
 
 ```{r}
 mode(afl.finalists)
@@ -287,36 +282,20 @@ mode(afl.finalists)
 modeOf(afl.finalists)
 ```
 
----
-# more on these things
-
-
 
 
 ---
-#central tendency practice 
-
+# Variability
 
 ```{r}
-
-#in base R
-mean(diamonds$price)
-#in tidyverse
-diamonds %>% summarise(mean(price))
-
+group_1 <- c(7,6,3,3,1)
+group_2 <- c(3,4,4,5,4)
+group_3 <- c(4,4,4,4,4)
 ```
 
-calcualte the mean and median for all the variables in the diamonds dataset. What is the easiest way to do this
+### - these all have same mean but there is something different about them all. Variability tells us how different scores are from each other. 
 
-```{r eval=FALSE, include=FALSE}
-diamonds %>% summarise_at(vars(carat:z), mean )
-```
-
-```{r eval=FALSE, include=FALSE}
-diamonds %>% summarise_all(list(min = min, max = max, mean = mean))
-```
-
-
+### - in theory we can ask how different a series of numbers are from *any* number in the group, but it sorta makes sense to pick the mean
 ---
 # Measures of Variability
 ________________________________
@@ -332,9 +311,9 @@ ________________________________
 
 
 ---
-#Interquartile range
+##Interquartile range
 
-##calculates the difference between the 25th quantile & the 75th quantile. fun stats fact: The median is the 50% quantile
+###calculates the difference between the 25th quantile & the 75th quantile. fun stats fact: The median is the 50% quantile
 
 ```{r}
 quantile(afl.margins)
@@ -343,7 +322,7 @@ quantile(afl.margins, probs= .5)
 ```
 
 
-#how would you get the 25% and 75% 
+###how would you get the 25% and 75% 
 
 ---
 
@@ -358,7 +337,6 @@ IQR(afl.margins)
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Boxplot_vs_PDF.svg/250px-Boxplot_vs_PDF.svg.png)
 background-size: contain
 
-#how to interpert IQR
 
 ???
 
@@ -369,38 +347,31 @@ data is above the 75th percentile, leaving the \middle half" of the data lying i
 the IQR is the range covered by that middle half.
 
 ---
-
-background-image: url(http://www-ist.massey.ac.nz/dstirlin/CAST/CAST/Sspread/images/iqrAndHisto.gif)
-background-size: contain
-
-#how to interpert IQR
----
 #Deviations
 
 
 ##these work by selecting a reference point and report a **typical** deviation from that
 
 ---
-##Mean absolute deviation - steps:
+###Mean absolute deviation - steps:
 
-###1. 56, 31, 56, 8, 32. <- mean = 36.6
+####1. 56, 31, 56, 8, 32. <- mean = 36.6
 
-###2. calcuate how much each value deviates  from the mean and take the absolute value
+####2. calcuate how much each value deviates  from the mean and take the absolute value
       56 - 36.6 = 19.4.
       31- 36.6  = 5.6
       56 - 36.6 = 19.4
       8 - 36.6 = 28.6
       32 - 36.6 = 4.6
 
-###3. then get the mean of these devations. that equals the mean absolute deviation
+####3. then get the mean of these devations. that equals the mean absolute deviation
 
 ```{r}
 d <- c(19.4,5.6,19.4,28.6,4.6)
 mean(d)
 ```
 
-???
-#in 2 weeks we will learn to make a function to do this
+
 
 ---
 #Variance
@@ -413,28 +384,26 @@ very similar to mean absolute deviation, but instead we square the deviation rat
 
 
 ---
-Find the variance of this dataset first without using the R function....
+Find the variance of this dataset
+
 
 ### 4, 8, 15, 16, 23, 42
 
-???
-
-(sum((set - mean(set))^2))/6
-
-
----
-
 ```{r}
 set <- c(4, 8, 15, 16, 23, 42)
+#formula
+(sum((set - mean(set))^2))/6
+#function
 var(set)
 ```
 
 
-???
-note diff between doing it by hand and using the Var function
+results are different!!!
+
 
 n vs. n-1
 
+???
 
 However, as we'll discuss in Chapter 10, there's a subtle distinction
 between \describing a sample" and \making guesses about the population from which the sample came".
@@ -454,19 +423,16 @@ Chapter 10.
 
 ## it isn't easy to interpert. All the numbers are squared..
 
+## let's say i have thevariance of some measure of how tall a hominin speices was. what is the meaining  ofsaying the variance is 256 meters-squared
 
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Comparison_standard_deviations.svg/600px-Comparison_standard_deviations.svg.png)
+##gibberish units...but useful in mathy terms!
 
-???
 
-lets say i have the  variance of some measure of how tall a hominin speices was. what is the meaing  of  saying the variance is 256 meters-squared
-
-gibberish units...but useful in mathy terms!
 ---
-#sd
+#standard deviation 
 
-the standard deviation pretty much lets us convert var into meaningful terms
-in fact, sometimes it is called the root mean squared deviation RMSD
+- The standard deviation pretty much lets us convert variance into *meaningful terms*
+- In fact, sometimes it is called the root mean squared deviation RMSD
 
 
 $$s  = \sqrt{  \frac{1}{n}  \sum_{i=1}^{N} (X_i - \overline{x})^2}$$
@@ -481,37 +447,21 @@ rely on a simple rule of thumb: in general, you should expect 68% of the data to
 deviation of the mean, 95% of the data to fall within 2 standard deviation of the mean, and 99.7% of
 the data to fall within 3 standard deviations of the mean. This rule tends to work pretty well most
 of the time, but it's not exact: it's actually calculated based on an assumption that the histogram is
-symmetric and \bell shaped".10 As
+symmetric and bell shaped".10 As
 
 ---
 
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Standard_deviation_diagram.svg/1200px-Standard_deviation_diagram.svg.png)
 background-size: contain
 
+####in general, you should expect 68% of the data to fall within 1 standard deviation of the mean, 95% of the data to fall within 2 standard deviation of the mean, and 99.7% of  the data to fall within 3 standard deviations
+
 ---
+# summary
 
-#A *worked* example
-
-lets say you measure the heights of your pets in mm:
-
-pet 1 = 600
-pet 2 = 450
-pet 3 = 400
-pet 4 = 390
-pet 5 = 300
-pet 6 = 150
-What is the mean?
-
-600 + 450 + 400 + 390 +300 / 5
-
-mean = 428
-
-now lets draw it out.
-calc var....
- now lets see what R says the var is b = 
-
-
-
+- SD and variance both tell us something about the 'spread' of the data
+- variance is helpful since it makes some math stuff easier!
+- SD, though, is stated in the original units
 
 
 
@@ -519,7 +469,10 @@ calc var....
 
 
 ---
+Next time...
+correlation etc
 
+---
 
 
 background-image: url(https://s3.amazonaws.com/libapps/accounts/73082/images/Skeweness.jpg)

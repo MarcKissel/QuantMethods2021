@@ -1,7 +1,10 @@
 ---
-title: "visual"
-output: html_document
-editor_options: 
+title: "visual data in R"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+editor_options:
   chunk_output_type: console
 ---
 
@@ -9,45 +12,93 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Making plots
+# Making plots with ggplot package
 
-[Story]{.ul}
+> To do this part of the homework you can copy and past the code in the 'code blocks' into R and run it. Then when you figure out how to answer the questions just copy and paste your code from R into this document!
+>
+> Rather than a normal handout/lab this one tells a story and has you learning ggplot while you do so. Be sure to check out the reading here: <https://r4ds.had.co.nz/data-visualisation.html> before doing this project. If you need more background on how ggplot works check out chpt 3 of <https://socviz.co/makeplot.html#makeplot> "Data Visualization"
+>
+> YOu might not know how to do the things being asked for right away. that is fine and expected. What i want you to learn is how to *find the answers* rather than what the answer is. In other words, I am more concerned with the process than the result. But if you are getting frustrated reach out and I'm always happy to help
 
-You are working with a professor of anthropology at Fancypants University. She has just discovered a new species of monkey that she wants you to collect data on. So you are off to the island of Naboombu, where you will be given the task of watching these primates.
+## [Story]{.ul}
+
+You are working on your Ph.D with a professor of anthropology at Fancypants University. She has just learned about a new species of monkey that she wants you to collect data on. So you are off to the island of Naboombu, where you will be given the task of watching these primates.
+
+![](The-Isle-of-Naboombu.png "the mysterious island of Naboombu")
 
 ## [Collecting your data, part 1]{.ul}
 
-When you arrive you notice that there are a whole lot of monkeys here and you need to find a way to get an idea of what they look like. So you and your team decide to start by measuring their tails (they aren't apes!). you manage to measure 500 of these fellas (ok, this is a bit of a reach but lets say that you are *really* quick at measuring)
+When you arrive on the western part of the island you notice that there are a whole lot of monkeys here and you need to find a way to get an idea of what they look like. So you and your team decide to start by measuring their tails (they aren't apes!). You manage to measure 500 of these fellas (ok, this is a bit of a reach but lets say that you are *really* quick at measuring and the monkeys like having their tails measured....)
 
-run the following R code to get the first monkey data!
+below is a very quick reminder of how R works
 
-```{r get data on tails}
+```{r}
+#first we make an object and assign something to it...
+
+my_numbers <- c(4, 8, 15, 16, 23, 42)
+#once we have an object we can do things to that object.
+
+mean(my_numbers)
+sum(my_numbers)
+sd(my_numbers)
+
+```
+
+We are going to be simulating the data you collected by creating objects and putting them together in a data frame. Run the following R code in a new session to get the first monkey data! **Be sure to run the first line of code that loads in the tidyverse library.** I made some comments so you can follow along with what the code is doing:
+
+```{r get data on tails, warning=FALSE, message=FALSE}
 library(tidyverse)
-tail_length <-rnorm(500,57,2)
-sample_number <-1:500
-monkey_pop <- rep(letters[1], 500)
-monkey_data_1 <- tibble(sample_number, tail_length, monkey_pop)
+set.seed(2020) #this sets the randomizer in R
+tail_length <-rnorm(500,57,2) # create a set of 500 random numbers with a mean of 57 and a standard deviation of 2 
+sample_number <-1:500 # create a vector of numbers from 1 to 500
+monkey_pop <- rep(letters[1], 500) # this makes a vector of 500 'a's
+monkey_data_1 <- tibble(sample_number, tail_length, monkey_pop) #create a data table (a tibble is a function that makes nice data tables with a modern flair...)
 
-monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1)
+monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  10) # this takes the monkey data and plots a histogram of the tail length
 ```
 
-You call your professor and she is **so happy** to hear your good news. But she wants the data in be visualized. Run the following code to make a histogram.
+### [Question 1:  changing the bin length:]{.ul}
 
-```{r first histogram}
-monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1)
+You note that the plot you made with the code above doesn't look very nice. After thinking for a bit you realize the bin length is too large and you can't see enough of the data. What code would you use to change the binwidth to be 1. copy the code from above and change it so the figure looks better. Then copy that code into the box below:
+
+> ### 
+>
+> ```{r Question 1}
+>
+>
+> #copy your answer to question 1 here:
+>
+>
+>
+>
+>
+>
+>
+> ```
+
+### [Question 2: Ok, but you know your professor wants the histogram to be blue. How can you change the code below to make it blue?]{.ul} 
+
+> #### (n.b. for help see section **3.5 "Mapping aesthetics vs setting them" of <https://socviz.co/makeplot.html#makeplot>)**
+
+```{r Question 2}
+
+monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram()
+
+#copy your answer to question 2 here:
+
+
+
+
+
+
+
 ```
 
-Ok, but she wants the histogram to be blue. How can you add to the code below to make it blue?
+You send this lovely blue histogram off to your professor and go and take a nap (measuring 500 tails *plus* data entry is serious work!)
 
-```{r Question 1}
+## [Collecting your data, part 2]{.ul}
 
-# change the code to make the histogram blue
-monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1)
-
-
-```
-
-After sending your data to your professor you hear about another group of monkeys on a different part of the island run the code below to get that data and make a histogram!
+The next day you are talking to some local people and hear about another group of monkeys on a different part of the island. **FIrst run the code below to get that data and make a histogram!**
 
 ```{r gorup b data}
 
@@ -59,69 +110,101 @@ monkey_data_2 <- tibble(sample_number, tail_length, monkey_pop)
 monkey_data_2 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1)
 ```
 
-Now you want to look at both of the populations at the same time! fortuently you have taken this class and have some R code ready to do this
+Now you want to look at both of the populations at the same time! Thankfully you have taken this class and have some R code ready to do this. Run the code below in your R session to make a histogram of both datasets
 
 ```{r all data}
-all_data <- bind_rows(monkey_data_1, monkey_data_2)
+all_data <- bind_rows(monkey_data_1, monkey_data_2) # here we are using the function bindrows to add the two datasets together!
 
-all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity')
+all_data %>% ggplot(aes(tail_length )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') 
 ```
 
-So you look at this and think to yourself "hey, they overlap a bit but there are difference at the tails. I am going to send this to my adviser and she will be soooooo happy!"
+hmmm...that doesn't look right since you can't tell the difference groups. But you think back to your stats class in college and remember that we need to set an `aes(...)` argument that specifies that a variable will be expressed by one of the available visual elements, such as size and color. you sorta did this above when we made the histogram blue....
 
-a few hours later you get an email with these requests. Your adviser wants you to do all of the following to the figure you have made
+### [Question 3:  How can you change the code below to make the different monkey populations have different colors (note: you just need to add one argument to the aes() part. i put "\*\*\*\*\*\*\*\*\*\*\*\*\*" to show where to put this]{.ul}
 
-1.  put the legend on the bottom rather than on the right
-2.  label the x axis "tail length (cm)"
-3.  label the y axis "number of observations"
-4.  give it a title that is meaningful
-5.  put a credit somewhere that says who made the figure
-6.  change the legend so that it says "Monkey groups"
-7.  change the labels from "a" and "b" to "Group one" and "Group 2"
-8.  
+```{r}
 
-TODO
+#edit the below code to color by the variable monkey_pop
 
-<https://www.r-graph-gallery.com/density_mirror_ggplot2.html>
+#all_data %>% ggplot(aes(tail_length, fill=monkey_pop, ******************** )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity')  
+```
 
-lets take this step by step. copy the below R code and use each step to build the new graph. If you need help use the class readings or ask on Discord!
+So you look at this and think to yourself "Hey, they overlap a bit but there are difference at the tails....😀. I am going to send this to my adviser and she will be soooooo happy!"
+
+A few hours later you get an email with these requests. Your adviser wants you to do all of the following to the figure you have made
+
+### [Question 4]{.ul} 
+
+-   Put the legend on the bottom rather than on the right
+
+-   Label the x axis "tail length (cm)"
+
+-   Label the y axis "number of observations"
+
+-   Give it a title that is meaningful
+
+-   Put a credit somewhere that says who made the figure
+
+-   Change the legend so that it says "Monkey groups"
+
+-   Change the labels from "a" and "b" to "Group one" and "Group 2"
+
+Lets take this step by step. Copy the below R code and use each step to build the new graph. If you need help use the class readings or ask on Discord! Then copy the code you used below. For example, to get the first part of this we would update the code like this
 
 ```{r base graph}
 
-all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity')
+#old code
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity', binwidth =  1)
+# new code
+
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity', binwidth =  1) + theme(legend.position = "bottom")
 ```
 
-OK, phew! you have this all ready to go...but then your prof calls you and says "we need to make sure that the text is SSSSSs"
+To figure out how to do this we are going to need to check online. One good source is <https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf>. For example if you look at the right hand column of page 2 you will see a box that talks about how to change the labels...another good source is this site: <https://ggplot2.tidyverse.org/reference/> which i use quite a bit to rejigger figures.
 
-ssssss
+### 
 
-[Bonus]{.ul}
-
-1.  put an image behind it
-
-2.  make a table to have at the back
-
-## [New visualizations]{.ul} 
-
-Your adviser now asks if you can make the plots with a different geom
-
-1.  make a density plot
-2.  make a ridgeline plot
-3.  make a boxplot
-4.  make a violin plot
-
-```{r}
-new_data %>%   ggplot(aes( monkey_pop, tail_length, fill = monkey_pop)) + geom_violin()
+```{r Question 4}
 
 
-new_data %>%   ggplot(aes(monkey_pop, tail_length, fill = monkey_pop)) + geom_violin()+ geom_jitter(height = 0, width = 0.1)
+#copy your answer to question 4 here:
+
+
+#plot a
+
+
+#plot b
+
+
+
+#plot c
+
+
+
+#plot d
+
+
+
+#plot e
+
+
+#plot f
+
+
+#plot g
+
+
+
+
 ```
 
-## [New data]{.ul}
+## [Part 3: New visualizations with new data]{.ul}
 
-You and your professor submit your data to a journal. After a few weeks you get your peer review back and the reviewers say "wow, this is cool! but ya know what, we think you need more measurements before we can conclude these are 2 different populations. can you go and measure ear length?"
+## 
 
-Run the following code to get the new_data
+You and your professor submit your data paper to a journal. After a few months you get your peer review back and the reviewers say "wow, this is cool! But ya know what, we think you need more measurements before we can conclude these are 2 different populations. Can you go and measure ear length?"
+
+copy and Run the following code to get the new_data
 
 ```{r ear data}
 
@@ -140,196 +223,135 @@ new_data <- all_data %>% left_join(ear_all, by= c("monkey_pop", "sample_number")
 
 ```
 
-Since you know have two measurements on each monkey you need a new way to visualize these data. Remembering what you learned at AppState you go and make a scatterplot
+Since you know have two measurements on each monkey you need a new way to visualize these data. Remembering what you learned at AppState you go and make a scatterplot of these data. Copy the below code into R and see what happens!
 
 ```{r scatter}
 
-new_data %>%   ggplot(aes(tail_length, ear)) + geom_point()
+new_data %>%   ggplot(aes(tail_length, ear)) + geom_point() # this makes the scatterplot geom
 
 new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop)) + geom_point()
 ```
 
-she comes back and asks for the following updates
+You are thrilled and send it off to your adviser.
 
-1.  put a label on group a
-2.  get rid of the legende
-3.  ddd
+She comes back and asks for the following updates:
 
-## interactive
+### [Question 5: updating the scatteplot]{.ul}
 
-you paper has been accepted but the editors want it slected for speiacl feature that requires an intearci comonet
+-   Get rid of the legend
 
-```{r interactive}
+-   Add a regression line for each group
 
-library(plotly)
+-   Add a transparency or a jittter to deal with over plotting
 
-p <- new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop)) + geom_point()
+-   Make the 2 groups have a different shape
 
-ggplotly(p)
+-   Add an ellipse to the groups ( *see "stat_ellipse()" for a hint*)
+
+\
+
+```{r question 4 answers}
+
+#write you answers to question 4 here
 
 
+#plot a
+
+
+#plot b
+
+
+
+#plot c
+
+
+# plot d
 
 ```
 
-add sample nuber:
+### 
+
+### [Question 6: taking it to 11...]{.ul}
+
+Your adviser now asks if you can make the plots with the new data the following different geoms.
+
+-   make a violin plot
+-   make a boxplot
+-   make a ridgeline plot (n.b. to do this one we need to install a new package called "ggridges" (<https://www.r-graph-gallery.com/294-basic-ridgeline-plot.html>)
+-   
 
 ```{r}
 
-p <- new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop, label= sample_number)) + geom_point()
+# write you answers to question 6 here. i put the first one here to help you out
 
-ggplotly(p)
+#plot a
+new_data %>%   ggplot(aes( monkey_pop, tail_length, fill = monkey_pop)) + geom_violin()
 
-```
-
-make it look pretty
-
-```{r}
-library(glue)
+# plot b
 
 
 
-p <- new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop, text = glue('sample is: {sample_number}'))) + geom_point()
-
+#plot c
 
 ```
 
 ## export the data
 
-she wants the whole dataset
+she wants the whole dataset sent to her so she can take a look at it herself. you know that you can use write_csv to do a basic export.
+
+### [Question 7]{.ul} 
+
+-   change the name of the csv file so it is called "new_primate_data" rather than "my_monkeydata.csv"
+
+-   change the format of the exported file to an Excel sheet (this is hard)
 
 ```{r}
-write_csv(new_data, "my_monkeydata.csv")
-```
 
-change the name of the csv file?
+#write you answers to question 7 here. as a tip look at this code: write_csv(new_data, "my_monkeydata.csv")
 
-change the format to ....
 
-## what else can you do with this data
+#part a
 
-Now, you got the paper published and got your Ph.d :)
 
-so you want to do your own thing...using the code above 'collect' some data on new traits and then do something new
 
-```{r make some new fake data}
+
+
+#part b
 
 ```
 
-# other things (move to another homework?)
+### 
 
-look back at your monkey data (here I WILL ADD MORE THINGS
+# [What else can you do with R visualizations]{.ul}
 
-it is wide, lets make it long
+Now that you have learned a lot about how to work with visualization data i want you to take a moment and think about how to approach another dataset
 
-```{r pivot}
+The palmerpenguins package contains two datasets. to install it copy the following code into R
 
+```{r, eval=FALSE}
+install.library("palmerpenguins")
 ```
 
-what else can we do?
+One is called `penguins`, and is a simplified version of the raw data; see [`?penguins`](https://allisonhorst.github.io/palmerpenguins/reference/penguins.html) for more info
 
-summary stats?
+The second dataset is `penguins_raw`, and contains all the variables and original names as downloaded; see [`?penguins_raw`](https://allisonhorst.github.io/palmerpenguins/reference/penguins_raw.html) for more info.
 
-We need the mean of the taisl...
+Both datasets contain data for 344 penguins. There are 3 different species of penguins in this dataset, collected from 3 islands in the Palmer Archipelago, Antarctica. The culmen is the upper ridge of a bird's bill. In the simplified penguins data, culmen length and depth are renamed as variables bill_length_mm and bill_depth_mm to be more intuitive.
 
-SSSSSSSS
-
-sssss
-
-lets do it the long way
+think about what the below code is doing. Once again we are using the pipe (%\>%) to take the dataset and apply a function to it (in this case, the count function)
 
 ```{r}
-total <- sum(new_data$tail_length)
-len <- length(new_data$tail_length)
-total/len
+
+library(palmerpenguins)
+glimpse(penguins)
+
+
+penguins %>%
+  count(species)
+
+penguins %>%
+  group_by(species) %>%
+  summarize(across(where(is.numeric), mean, na.rm = TRUE))
 ```
 
-lets make our first funciton
-
-```{r}
-find_mean <- function(data){
-  a <- sum(data)
-  b <- a/length(data)
-  return(b)
-}
-find_mean(new_data$tail_length)
-```
-
-hey, we just made our firt function!!!!
-
-(of coure, R has a buitl in mean fucito..but dont tell your prof that..let her think you are just asweomd!
-
-but here is a trciky thing.we have a sample mean not the populaiton mean. that is cause this is just an esiamte to fhte true mean.
-
-your prof was smart when she asked for 500 monkeys. the more smaples the closer your sample reaches to the population.
-
-here is an inteartie veriosn that shows this well (doesnt work)
-
-```{r}
-library(emdbook)
-library(plotly)
-library(here)
-
-m <- list(
-  l = 50,
-  r = 50,
-  b = 10,
-  t = 10,
-  pad = 4
-)
-accumulate_by <- function(dat, var) {
-  var <- lazyeval::f_eval(var, dat)
-  lvls <- plotly:::getLevels(var)
-  dats <- lapply(seq_along(lvls), function(x) {
-    cbind(dat[var %in% lvls[seq(1, x)], ], frame = lvls[[x]])
-  })
-  dplyr::bind_rows(dats)
-}
-
-d <- do.call(rbind, lapply(lseq(10,10000, 300), function(x){
-	d <- data.frame(x=rnorm(x), frame=x/300, N=x)
-	return(d)
-}))
-
-dd <- aggregate(data=d, x~frame+N, FUN=mean)
-%>% accumulate_by(~N)
-
-p <- dd %>% plot_ly(x=~log10(N), y=~x, frame=~frame, type="scatter", mode="lines", line = list(simplyfy = F, color="orangered"),width=550, height=350)%>% 
- animation_opts(
-    frame = 10, 
-    transition = 0, 
-    redraw = FALSE
- ) %>% 
-config(displayModeBar = F) %>%
-  layout(
-    xaxis = list(
-      title = "Sample Size (log10)",
-      zeroline = F
-    ),
-    yaxis = list(range=c(-0.7,0.7),
-      title = "Mean",
-      zeroline = F
-    ), autosize=F, margin=m
-  ) %>%
-  animation_slider(
-    hide = T
-    )%>%
-  animation_button(
-    x = 1, xanchor = "right", y = 0, yanchor = "bottom"
-  )
-```
-
-<https://tinystats.github.io/teacups-giraffes-and-statistics/04_variance.html>
-
-<https://github.com/tinystats/teacups-giraffes-and-statistics/blob/master/04_variance.Rmd>
-
-## spread
-
-variance
-
-strat with popualtoi var
-
-## diet
-
-ok, you now need info on diet so you get info on how much food they eat and their body size.
-
-we want to look at the covariance
+Take a look at these data. what sort of figures might you want to make? Think about how you could tell a story about these penguins via an image. Then write some code that will let you do this. When you are done, take a moment to explain in prose why you made this figure and how you used R to do it

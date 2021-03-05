@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>plots with ggplot2!</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Marc Kissel" />
+    <meta name="date" content="2021-02-23" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# plots with ggplot2!
+### Marc Kissel
+### 2021-02-23
+
+---
+
+
+
+
+
+
+
+---
+
+####ggplot is based on something called "Grammar of Graphics."
+
+### While this is a complex topic the idea is that we make graphs by adding on layers to existing plots. We start by giving ggplot the data we are gonna use, then we tell it what the specific *aesthetics* are (the x and y axis, what varibables we want to assign differnet colors to, etc.), then we tell is what type of graph to make.
+
+###The benefit here is that it gives us a lot of options but the drawback is that it takes a bit of time to work
+
+### The trick is that making a plot almost always takes the same sequence of steps. once we get those down it is easy to pviot to another example
+
+---
+#mapping
+
+- There is a structured relationship between  variables in your data and their representation in the plot. 
+
+- The code you write specifies the connections between the variables. These connections called aesthetic mappings or just aesthetics
+
+- Every plot begins by telling the function what our data is &amp;  then how the variables in this data logically map onto the plot’s aesthetic
+
+- you take the result and say what general sort of plot you want, such as a scatterplot, a boxplot, or a bar chart
+
+- as the homework shows, we can then play around with a lot 
+
+---
+STEPS
+
+1. Tell the ggplot() function what our data is. (The data = … step.)
+
+2. Tell ggplot() what relationships we want to see. (The mapping = aes(…) step.)
+
+3. Tell ggplot how we want to see the relationships in our data. (Choose a geom.)
+
+4. Layer on geoms as needed, by adding them to the p object one at a time.
+
+5. Use  additional functions to adjust scales, labels, tick marks, titles. (labs, guides)
+
+
+
+---
+example from gapminder
+
+
+```r
+#install.packages("gapminder")
+library(gapminder)
+library(tidyverse)
+p &lt;- ggplot(data = gapminder)
+```
+
+
+```r
+p
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+enter the above code. what happens when we run the object p?
+---
+## ggplot knows our data, but not what the mapping
+
+##in ggplot, mappings are specified using the aes() function. Like this:
+
+
+```r
+p &lt;- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp))
+```
+
+what happens now?
+
+---
+## ok, this looks a little better but we don't see any object
+
+- mapping = aes(...) argument links variables to things you will see on the plot.
+
+- The variable on the x-axis is going to be *gdpPercap*, and the variable on the y-axis is going to be *lifeExp*.” 
+
+- Impt: The aes() function does not say where variables with those names are  found. ggplot() is going to assume things with that name are in the object given to the data argument.
+
+- Other aesthetic mappings can include color, shape, size, and line type.
+ 
+## - We now need to add a layer to the plot
+ 
+ ggplot2 fun fact: you can look at the object we made by str(p).
+---
+# Build the layers!
+
+- remember the process here is additive 
+
+
+
+```r
+p &lt;- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y=lifeExp))
+p + geom_smooth()
+```
+
+```
+## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+*What happened?*
+geom_smooth() calculated a smoothed line for us *&amp;* shaded in a ribbon showing the standard error for the line!  To see the data points and the line together, we add geom_point() layer
+
+
+
+```r
+p + geom_point() + geom_smooth() 
+```
+
+```
+## `geom_smooth()` using method = 'gam' and formula 'y ~ s(x, bs = "cs")'
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+
+We did not have to tell geom_point() or geom_smooth() much. They inherit  information from the original p object.This makes it easier to build plots one layer at a time
+
+
+```r
+p + geom_point() + geom_smooth(method = "lm") 
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+A scale transformation is applied to the data before the smoother is layered on to the plot. But *doesn't* change the underlying data!
+
+
+```r
+p &lt;- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y=lifeExp))
+p + geom_point() +
+    geom_smooth(method = "gam") +
+    scale_x_log10()
+```
+
+```
+## `geom_smooth()` using formula 'y ~ s(x, bs = "cs")'
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+```r
+#install.packages("scales")
+p &lt;- ggplot(data = gapminder, mapping = aes(x = gdpPercap, y=lifeExp))
+p + geom_point() +
+    geom_smooth(method = "gam") +
+    scale_x_log10(labels = scales::dollar)
+```
+
+```
+## `geom_smooth()` using formula 'y ~ s(x, bs = "cs")'
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+#Reminders
+
+An aesthetic mapping specifies that a variable will be expressed by one of the available visual elements, such as size, or color, or shape, and so on.
+
+
+```r
+p &lt;-  ggplot(data = gapminder,
+             mapping = aes(x = gdpPercap,
+                            y = lifeExp,
+                            color = continent))
+
+p + geom_point()
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+---
+# color
+
+The aes() function is for mappings only. to set a color outside that  we do it in the geom_ we are using. 
+
+
+```r
+p + geom_point(color = "purple") +
+    geom_smooth(method = "loess") +
+    scale_x_log10()
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+
+
+---
+
+```r
+p &lt;- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp)) 
+p + geom_point(alpha = 0.3) +
+    geom_smooth(color = "orange", se = FALSE, size = 8, method = "lm") +
+    scale_x_log10()
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+---
+### commmon problem 
+
+
+```r
+p &lt;- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp,
+                          color = continent))
+p + geom_point() +
+    geom_smooth(method = "loess") +
+    scale_x_log10()
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+only one line? we need to map the aesthetics we want to only the geom_ functions that we want them to apply to
+
+
+```r
+p &lt;- ggplot(data = gapminder, mapping = aes(x = gdpPercap, y = lifeExp))
+p + geom_point(mapping = aes(color = continent)) +
+    geom_smooth(method = "loess") +
+    scale_x_log10()
+```
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+### labels
+
+to set a label
+
+
+
+```r
+p + geom_point(color = "purple") + scale_x_log10() + labs(title = "my graph")
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+---
+
+
+
+```r
+p &lt;-  ggplot(data = gapminder,
+             mapping = aes(x = gdpPercap,
+                            y = lifeExp,
+                            color = continent))
+p + geom_point() + scale_x_log10() + labs(tile = "my title")
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+```r
+p + geom_point() + scale_x_log10() + labs(tile = "my title", color = "which continent")
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+
+---
+# change the background
+
+
+
+```r
+p &lt;- p + geom_point() + scale_x_log10() + labs(tile = "my title", color = "which continent")
+
+
+p + theme_classic()
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+```r
+p + theme(panel.background = element_rect(color = "red", fill = "green"))
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+
+---
+# no legend
+
+
+```r
+p &lt;- p + geom_point() + scale_x_log10() + labs(tile = "my title", color = "which continent")
+```
+
+```
+## Scale for 'x' is already present. Adding another
+## scale for 'x', which will replace the existing
+## scale.
+```
+
+```r
+p + theme(legend.position = "none")
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+
+---
+
+
+```r
+# install.packages(devtools)
+# devtools::install_github("Ryo-N7/tvthemes")
+library(tvthemes)
+
+p + theme_simpsons()
+```
+
+![](ggplot2_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+
+---
+save
+
+
+```r
+ggsave(filename = "my_figure.png")
+```
+
+```
+## Saving 7 x 7 in image
+```
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

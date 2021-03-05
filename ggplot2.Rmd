@@ -1,0 +1,315 @@
+---
+title: "plots with ggplot2!"
+subtitle: ""  
+author: 
+  - "Marc Kissel"
+  
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#1381B0",
+  secondary_color = "#FF961C",
+  inverse_header_color = "#FFFFFF"
+)
+```
+
+
+---
+
+####ggplot is based on something called "Grammar of Graphics."
+
+### While this is a complex topic the idea is that we make graphs by adding on layers to existing plots. We start by giving ggplot the data we are gonna use, then we tell it what the specific *aesthetics* are (the x and y axis, what varibables we want to assign differnet colors to, etc.), then we tell is what type of graph to make.
+
+###The benefit here is that it gives us a lot of options but the drawback is that it takes a bit of time to work
+
+### The trick is that making a plot almost always takes the same sequence of steps. once we get those down it is easy to pviot to another example
+
+---
+#mapping
+
+- There is a structured relationship between  variables in your data and their representation in the plot. 
+
+- The code you write specifies the connections between the variables. These connections called aesthetic mappings or just aesthetics
+
+- Every plot begins by telling the function what our data is &  then how the variables in this data logically map onto the plot’s aesthetic
+
+- you take the result and say what general sort of plot you want, such as a scatterplot, a boxplot, or a bar chart
+
+- as the homework shows, we can then play around with a lot 
+
+---
+STEPS
+
+1. Tell the ggplot() function what our data is. (The data = … step.)
+
+2. Tell ggplot() what relationships we want to see. (The mapping = aes(…) step.)
+
+3. Tell ggplot how we want to see the relationships in our data. (Choose a geom.)
+
+4. Layer on geoms as needed, by adding them to the p object one at a time.
+
+5. Use  additional functions to adjust scales, labels, tick marks, titles. (labs, guides)
+
+
+
+---
+example from gapminder
+
+```{r}
+#install.packages("gapminder")
+library(gapminder)
+library(tidyverse)
+p <- ggplot(data = gapminder)
+```
+
+```{r, EVAL=FALSE}
+
+p
+```
+
+enter the above code. what happens when we run the object p?
+---
+## ggplot knows our data, but not what the mapping
+
+##in ggplot, mappings are specified using the aes() function. Like this:
+
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp))
+```
+
+what happens now?
+
+---
+## ok, this looks a little better but we don't see any object
+
+- mapping = aes(...) argument links variables to things you will see on the plot.
+
+- The variable on the x-axis is going to be *gdpPercap*, and the variable on the y-axis is going to be *lifeExp*.” 
+
+- Impt: The aes() function does not say where variables with those names are  found. ggplot() is going to assume things with that name are in the object given to the data argument.
+
+- Other aesthetic mappings can include color, shape, size, and line type.
+ 
+## - We now need to add a layer to the plot
+ 
+ ggplot2 fun fact: you can look at the object we made by str(p).
+---
+# Build the layers!
+
+- remember the process here is additive 
+
+
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y=lifeExp))
+p + geom_smooth()
+```
+
+---
+*What happened?*
+geom_smooth() calculated a smoothed line for us *&* shaded in a ribbon showing the standard error for the line!  To see the data points and the line together, we add geom_point() layer
+
+
+```{r}
+p + geom_point() + geom_smooth() 
+```
+
+---
+
+We did not have to tell geom_point() or geom_smooth() much. They inherit  information from the original p object.This makes it easier to build plots one layer at a time
+
+```{r}
+p + geom_point() + geom_smooth(method = "lm") 
+```
+
+
+---
+
+
+A scale transformation is applied to the data before the smoother is layered on to the plot. But *doesn't* change the underlying data!
+
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y=lifeExp))
+p + geom_point() +
+    geom_smooth(method = "gam") +
+    scale_x_log10()
+```
+
+
+---
+
+```{r}
+#install.packages("scales")
+p <- ggplot(data = gapminder, mapping = aes(x = gdpPercap, y=lifeExp))
+p + geom_point() +
+    geom_smooth(method = "gam") +
+    scale_x_log10(labels = scales::dollar)
+```
+
+---
+#Reminders
+
+An aesthetic mapping specifies that a variable will be expressed by one of the available visual elements, such as size, or color, or shape, and so on.
+
+```{r}
+p <-  ggplot(data = gapminder,
+             mapping = aes(x = gdpPercap,
+                            y = lifeExp,
+                            color = continent))
+
+p + geom_point()
+```
+
+---
+# color
+
+The aes() function is for mappings only. to set a color outside that  we do it in the geom_ we are using. 
+
+```{r}
+p + geom_point(color = "purple") +
+    geom_smooth(method = "loess") +
+    scale_x_log10()
+```
+
+
+
+---
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp)) 
+p + geom_point(alpha = 0.3) +
+    geom_smooth(color = "orange", se = FALSE, size = 8, method = "lm") +
+    scale_x_log10()
+```
+
+---
+### commmon problem 
+
+```{r}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp,
+                          color = continent))
+p + geom_point() +
+    geom_smooth(method = "loess") +
+    scale_x_log10()
+```
+
+---
+only one line? we need to map the aesthetics we want to only the geom_ functions that we want them to apply to
+
+```{r}
+p <- ggplot(data = gapminder, mapping = aes(x = gdpPercap, y = lifeExp))
+p + geom_point(mapping = aes(color = continent)) +
+    geom_smooth(method = "loess") +
+    scale_x_log10()
+```
+
+---
+### labels
+
+to set a label
+
+
+```{r}
+p + geom_point(color = "purple") + scale_x_log10() + labs(title = "my graph")
+```
+
+---
+
+
+```{r}
+p <-  ggplot(data = gapminder,
+             mapping = aes(x = gdpPercap,
+                            y = lifeExp,
+                            color = continent))
+p + geom_point() + scale_x_log10() + labs(tile = "my title")
+
+
+```
+
+
+---
+
+```{r}
+p + geom_point() + scale_x_log10() + labs(tile = "my title", color = "which continent")
+```
+
+
+---
+# change the background
+
+
+```{r}
+p <- p + geom_point() + scale_x_log10() + labs(tile = "my title", color = "which continent")
+
+
+p + theme_classic()
+
+
+
+```
+
+
+---
+
+```{r}
+
+
+p + theme(panel.background = element_rect(color = "red", fill = "green"))
+
+
+
+```
+
+
+---
+# no legend
+
+```{r}
+p <- p + geom_point() + scale_x_log10() + labs(tile = "my title", color = "which continent")
+
+p + theme(legend.position = "none")
+```
+
+
+---
+
+```{r}
+# install.packages(devtools)
+# devtools::install_github("Ryo-N7/tvthemes")
+library(tvthemes)
+
+p + theme_simpsons()
+```
+
+
+---
+save
+
+```{r}
+ggsave(filename = "my_figure.png")
+```
+

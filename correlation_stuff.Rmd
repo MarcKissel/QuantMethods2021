@@ -1,0 +1,213 @@
+---
+title: "Presentation Ninja"
+subtitle: "&#x2694;&#xFE0F; xaringan +<br/>&#x1F60E; xaringanthemer"  
+author: 
+  - "Yihui Xie"
+  - "Garrick Aden-Buie"
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#1381B0",
+  secondary_color = "#FF961C",
+  inverse_header_color = "#FFFFFF"
+)
+```
+
+Next time...
+correlation etc
+
+---
+
+
+background-image: url(https://s3.amazonaws.com/libapps/accounts/73082/images/Skeweness.jpg)
+background-size: contain
+
+
+
+
+???
+![](http://jse.amstat.org/v13n2/vonhippel.html)
+
+???
+if the data tend to have a lot of extreme small values (i.e., the lower tail is \longer"
+than the upper tail) and not so many extremely large values (left panel), then we say that the data are
+negatively skewed. On the other hand, if there are more extremely large values than extremely small ones
+(right panel) we say that the data are positively skewed. That's the qualitative idea behind skewness.
+The actual formula for the skewness of a data set is as follows
+
+
+Many textbooks teach a rule of thumb stating that the mean is right of the median under right skew, and left of the median under left skew. This rule fails with surprising frequency. It can fail in multimodal distributions, or in distributions where one tail is long but the other is heavy. Most commonly, though, the rule fails in discrete distributions where the areas to the left and right of the median are not equal. Such distributions not only contradict the textbook relationship between mean, median, and skew, they also contradict the textbook interpretation of the median. We discuss ways to correct ideas about mean, median, and skew, while enhancing the desired intuition.
+---
+
+
+background-image: url(https://i.stack.imgur.com/KBQLN.jpg)
+background-size: contain
+
+#Kurtosis - the 'pointeness' of the data
+
+
+
+
+---
+
+---
+# R tips
+
+### summary function 
+
+```{r}
+summary(diamonds)
+```
+
+### describe function
+needs the psych package. do you remember how to get a package/
+
+```{r}
+#describe(diamonds)
+```
+
+
+---
+#Correlations -Describe the relationships between variables in the data.
+
+##covariance 
+
+$$Cov(X,Y)  = \  \frac{1}{n-1}  \sum_{i=1}^{N} (X_i - \overline{X})(Y_i - \overline{Y})$$
+
+if 
+#### Cov(X,Y) = 0, then unrealted
+#### Cov(X,Y) = +, then positive relationship
+#### Cov(X,Y) = -, then negative relationship
+
+But, note what units we are in.....
+
+???
+The covariance between two variables X and Y is a generalisation of the notion of the
+variance; it's a mathematically simple way of describing the relationship between two variables that isn't
+terribly informative to humans:
+
+Because we're multiplying (i.e., taking the \product" of) a quantity that depends on X by a quantity
+that depends on Y and then averaging17, you can think of the formula for the covariance as an \average
+cross product" between X and Y . The covariance has the nice property that, if X and Y are entirely
+unrelated, then the covariance is exactly zero. If the relationship between them is positive (in the
+sense shown in Figure 5.9) then the covariance is also positive; and if the relationship is negative then
+the covariance is also negative. In other words, the covariance captures the basic qualitative idea of
+correlation. Unfortunately, the raw magnitude of the covariance isn't easy to interpret: it depends on
+the units in which X and Y are expressed, and worse yet, the actual units that the covariance itself
+is expressed in are really weird. For instance, if X refers to the dan.sleep variable (units: hours) and
+Y refers to the dan.grump variable (units: grumps), then the units for their covariance are \hours 
+grumps". And I have no freaking idea what that would even mean.
+
+
+---
+
+#Pearson correlation coefficient - *r*
+______________________________________
+
+- This *fixes* covaraince by standardizing it.
+- Measures the strength of the **linear** relationship between two variables. 
+
+$$r_{xy}  =  \frac{Cov(X,Y)}{\sigma_x \sigma_y}$$
+
+- between -1 (perfect negative relationship) and 1 a perfect positive relationship.
+
+gives a measure of the extent to which the data all tend to
+fall on a single, perfectly straight line.
+
+also tells us how knowing one value gives us info on the other value
+
+
+
+???
+
+However, because we have two variables that contribute to the covariance, the standardisation
+only works if we divide by both standard deviations.18 In other words, the correlation between X and Y
+can be written as follows:
+rXY 
+CovpX; Y q
+^X ^Y
+By doing this standardisation, not only do we keep all of the nice properties of the covariance discussed
+earlier, but the actual values of r are on a meaningful scale: r  1 implies a perfect positive relationship,
+and r  1 implies a perfect negative relationship. I'll expand a little more on this point later, in
+Section 5.7.5. But before I do, let's look at how to calculate correlations in R
+
+---
+#Examples of covariance  in R
+
+
+```{r}
+#cov(mtcars)
+```
+
+---
+#Examples of correlation  in R
+
+```{r}
+#cor(mtcars)
+```
+
+
+---
+#Corrgrams
+
+exploratory visual display and  depicting the patterns of relations among variables 
+
+#need the corrgram package for this
+
+```{r echo=FALSE}
+library(corrgram)
+vars2 <- c("Assists","Atbat","Errors","Hits","Homer","logSal",
+"Putouts","RBI","Runs","Walks","Years")
+
+corrgram(baseball[,vars2],
+lower.panel=panel.shade, upper.panel=panel.pie)
+
+
+
+```
+
+
+--
+```{r}
+anscombe.1 <- data.frame(x = anscombe[["x1"]], y = anscombe[["y1"]], Set = "Anscombe Set 1")
+anscombe.2 <- data.frame(x = anscombe[["x2"]], y = anscombe[["y2"]], Set = "Anscombe Set 2")
+anscombe.3 <- data.frame(x = anscombe[["x3"]], y = anscombe[["y3"]], Set = "Anscombe Set 3")
+anscombe.4 <- data.frame(x = anscombe[["x4"]], y = anscombe[["y4"]], Set = "Anscombe Set 4")
+
+anscombe.1 %>% ggplot(aes(x=x,y=y)) + geom_point()
+anscombe.2 %>% ggplot(aes(x=x,y=y)) + geom_point()
+anscombe.3 %>% ggplot(aes(x=x,y=y)) + geom_point()
+anscombe.4 %>% ggplot(aes(x=x,y=y)) + geom_point()
+```
+
+
+
+---
+
+watch hans roling and then...
+
+![](https://speakerdeck.com/hadley/welcome-to-the-tidyverse)
+
+
+---
+
+
+#R practice
+
+
+

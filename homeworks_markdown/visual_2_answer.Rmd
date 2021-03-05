@@ -1,0 +1,279 @@
+---
+title: "visual data in R"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+editor_options:
+  chunk_output_type: console
+---
+
+# answers
+
+Run the following R code in a new session to get the first monkey data!
+
+```{r get data on tails, warning=FALSE, message=FALSE}
+library(tidyverse)
+set.seed(2020) #this sets the randomizer in R
+tail_length <-rnorm(500,57,2) # create a set of 500 random numbers with a mean of 57 and a standard deviation of 2 
+sample_number <-1:500 # create a vector of numbers from 1 to 500
+monkey_pop <- rep(letters[1], 500) # this makes a vector of 500 'a's
+monkey_data_1 <- tibble(sample_number, tail_length, monkey_pop) #create a data table (a tibble is a function that makes nice data tables with a modern flair...)
+
+monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  10) # this takes the monkey data and plots a histogram of the tail length
+```
+
+### [Question 1: Changing the bin length:]{.ul}
+
+> ### 
+>
+> ```{r Question 1}
+> >
+> monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1) #note that we change the binwidth to equal 1. can play around with this to get idea of how it changes the shape of the histogram
+> >
+> ```
+
+### [Question 2: Ok, but you know your professor wants the histogram to be blue. How can you change the code below to make it blue?]{.ul}
+
+> #### (n.b. for help see section **3.5 "Mapping aesthetics vs setting them" of <https://socviz.co/makeplot.html#makeplot>)**
+
+```{r Question 2}
+
+
+monkey_data_1 %>%  ggplot(aes(tail_length)) + geom_histogram(fill = "blue") # note that we put color = blue in the arguments for the geom. this is cause we aren't mapping a variable to an aesthetic but rather just telling it the color we want.  
+
+
+
+
+```
+
+You send this lovely blue histogram off to your professor and go and take a nap (measuring 500 tails *plus* data entry is serious work!)
+
+## [Collecting your data, part 2]{.ul}
+
+```{r gorup b data}
+
+tail_length <-rnorm(500,52,2)
+sample_number <-501:1000
+monkey_pop <- rep(letters[2], 500)
+monkey_data_2 <- tibble(sample_number, tail_length, monkey_pop)
+
+monkey_data_2 %>%  ggplot(aes(tail_length)) + geom_histogram(binwidth =  1)
+```
+
+```{r all data}
+
+all_data <- bind_rows(monkey_data_1, monkey_data_2) # here we are using the function bindrows to add the two datasets together!
+
+all_data %>% ggplot(aes(tail_length )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') 
+
+
+```
+
+### [Question 3: How can you change the code below to make the different monkey populations have different colors (note: you just need to add one argument to the aes() part. i put "\*\*\*\*\*\*\*\*\*\*\*\*\*" to show where to put this]{.ul}
+
+```{r}
+
+
+all_data %>% ggplot(aes(tail_length, fill = monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') # now, we are putting the fill arguement in the aesthetic cause we want to map the monkey_pop variable onto it.  
+
+# if you want specific colors:
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop)) + geom_histogram( alpha=0.6, position = 'identity') + scale_fill_manual(values=c("green", "yellow")) # this is a bit tricky. to set the colore we use scale_fill_manual() which lets us set the 'values' we want. 
+
+```
+
+### [Question 4]{.ul}
+
+-   Put the legend on the bottom rather than on the right
+
+-   Label the x axis "tail length (cm)"
+
+-   Label the y axis "number of observations"
+
+-   Give it a title that is meaningful
+
+-   Put a credit somewhere that says who made the figure
+
+-   Change the legend so that it says "Monkey groups"
+
+-   Change the labels from "a" and "b" to "Group one" and "Group 2"
+
+-   
+
+### 
+
+```{r Question 4}
+
+
+
+
+#plot a
+
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') + theme(legend.position = "bottom") #note the new function here theme. this has a few arguments in it. legend.position lets us say where we want the legend to go
+
+
+#plot b
+
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') + theme(legend.position = "bottom") + labs(x= "tail lenght (cm)") #there are a few ways to do this. here we use the labs function to tell R to relabel the x axis using the 'x =..' argument.
+
+
+
+#plot c
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') + theme(legend.position = "bottom") + labs( x= "tail lenght (cm)", y ="number of monkeys")
+#now we change y!
+
+#plot d
+
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') + theme(legend.position = "bottom") + labs(title = "monkey's from Naboombu", x= "tail lenght (cm)", y ="number of monkeys") #adding a new arguement to labs() that lets us set the title
+ 
+#plot e
+
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') + theme(legend.position = "bottom") + labs(title = "monkey's from Naboombu", caption = "data collected by Jessica Jones", x= "tail lenght (cm)", y ="number of monkeys") #caption adds a note in the lower right!
+
+#plot f
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') + theme(legend.position = "bottom") + labs(title = "monkey's from Naboombu", caption = "data collected by Jessica Jones", x= "tail lenght (cm)", y ="number of monkeys", fill = "groups") #finally, we add the "fill = "groups" " line to the labs function to change the caption header
+
+#plot g
+
+# here is pretty much all the things in one:
+
+all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="#e9ecef", alpha=0.6, position = 'identity') + theme(legend.position = "bottom") + labs(title = "monkey's from Naboombu", caption = "data collected by Jessica Jones", x= "tail lenght (cm)", y ="number of monkeys", fill = "groups") + scale_fill_discrete(breaks=c("a", "b"), labels=c("Group a", "group b")) #and finally, scale_fill_discrete() lets us control what the legend itself says. this is cause back in the "ggplot(aes(tail_length, fill=monkey_pop ))" part we set the fill and R knows is it a discreate variable 
+
+
+
+```
+
+## [Part 3: New visualizations with new data]{.ul}
+
+copy and Run the following code to get the new_data
+
+```{r ear data}
+
+ear1 <- rnorm(500, 4.4, .22)
+ear2 <- rnorm(500, 6.3, .31)
+
+ear1 <-tibble(ear =rnorm(500, 4.4, .22), monkey_pop = rep(letters[1], 500), sample_number = 1:500)
+
+
+ear2 <-tibble(ear =rnorm(500, 6.3, .31), monkey_pop = rep(letters[2], 500), sample_number = 501:1000)
+
+ear_all <- bind_rows(ear1, ear2)
+
+new_data <- all_data %>% left_join(ear_all, by= c("monkey_pop", "sample_number"))
+
+
+```
+
+Since you know have two measurements on each monkey you need a new way to visualize these data. Remembering what you learned at AppState you go and make a scatterplot of these data. Copy the below code into R and see what happens!
+
+```{r scatter}
+
+new_data %>%   ggplot(aes(tail_length, ear)) + geom_point() # this makes the scatterplot geom
+
+new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop)) + geom_point()
+```
+
+You are thrilled and send it off to your adviser.
+
+She comes back and asks for the following updates:
+
+### [Question 5: updating the scatteplot]{.ul}
+
+-   Get rid of the legend
+
+-   Add a regression line for each group
+
+-   Add a transparency or a jittter to deal with over plotting
+
+-   Make the 2 groups have a different shape
+
+-   Add an ellipse to the groups ( *see "stat_ellipse()" for a hint*)
+
+\
+
+```{r question 4 answers}
+
+#write you answers to question 4 here
+
+
+#plot a
+new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop)) + geom_point() + theme(legend.position = "none") # here, we use the theme arguement again but this time use legend.position = none to get rid of it (fun fact, i always forget how to do this!)
+
+#plot b
+
+new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop)) + geom_point() + theme(legend.position = "none") + geom_smooth(method = 'lm') #geom_smooth adds a best fit line. adding method=lm means it is going to use the a linear model to fit the line 
+
+#plot c
+
+new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop)) + geom_point(alpha = .5) + theme(legend.position = "none") + geom_smooth(method = 'lm')  #setting the alpha in the geom_point arguement gives the points some transparency  
+
+# plot d
+new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop, shape = monkey_pop)) + geom_point(alpha = .5) + theme(legend.position = "none") + geom_smooth(method = 'lm')   # adding shape to the aesthetic arguement maps that onto a variable 
+
+#plot e
+new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop, shape = monkey_pop)) + geom_point(alpha = .5) + theme(legend.position = "none") + geom_smooth(method = 'lm')  + stat_ellipse()  #stat.ellipse adds the ellipse
+```
+
+### 
+
+### [Question 6: taking it further]{.ul}
+
+Your adviser now asks if you can make the plots with the new data the following different geoms.
+
+-   make a violin plot
+-   make a boxplot
+-   make a ridgeline plot (n.b. to do this one we need to install a new package called "ggridges" (<https://www.r-graph-gallery.com/294-basic-ridgeline-plot.html>)
+-   
+
+```{r}
+
+# write you answers to question 6 here. i put the first one here to help you out
+
+#plot a
+new_data %>%   ggplot(aes( monkey_pop, tail_length, fill = monkey_pop)) + geom_violin()
+
+# plot b
+new_data %>%   ggplot(aes( monkey_pop, tail_length, fill = monkey_pop)) + geom_boxplot()
+
+
+#plot c
+#install.packages("ggridges")
+library(ggridges)
+new_data %>%ggplot(aes( x = tail_length, y= monkey_pop, fill = monkey_pop)) + geom_density_ridges() #note here that we need to switch the x and y since we are making x be the measurement and y be the grouping....
+
+
+```
+
+## export the data
+
+she wants the whole dataset sent to her so she can take a look at it herself. you know that you can use write_csv to do a basic export.
+
+### [Question 7]{.ul}
+
+-   change the name of the csv file so it is called "new_primate_data" rather than "my_monkeydata.csv"
+
+-   change the format of the exported file to an Excel sheet (this is hard)
+
+```{r}
+
+#write you answers to question 7 here. as a tip look at this code: write_csv(new_data, "my_monkeydata.csv")
+
+
+#part a
+
+write_csv(new_data, "new_primate_data.csv")
+
+
+
+#part b
+install.packages("writexl")
+library(writexl)
+write_xlsx(new_data, "new.xlsx")
+
+
+
+```
+
+### 
+
+# 

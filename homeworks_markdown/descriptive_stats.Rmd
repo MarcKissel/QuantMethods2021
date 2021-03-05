@@ -1,0 +1,129 @@
+---
+title: "monkey_descirptive stats"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## ook back at your monkey data (here I WILL ADD MORE THINGS
+
+so after getting your PhD onthe new speices you are gonna do a postdoc to study them even more (yay!)
+
+it is wide, lets make it long
+
+```{r pivot}
+
+```
+
+what else can we do?
+
+summary stats?
+
+We need the mean of the taisl...
+
+SSSSSSSS
+
+sssss
+
+lets do it the long way
+
+## descriptive stats
+
+```{r}
+total <- sum(new_data$tail_length)
+len <- length(new_data$tail_length)
+total/len
+```
+
+lets make our first function
+
+```{r}
+find_mean <- function(data){
+  a <- sum(data)
+  b <- a/length(data)
+  return(b)
+}
+find_mean(new_data$tail_length)
+```
+
+hey, we just made our firt function!!!!
+
+(of coure, R has a buitl in mean fucito..but dont tell your prof that..let her think you are just asweomd!
+
+but here is a trciky thing.we have a sample mean not the populaiton mean. that is cause this is just an esiamte to fhte true mean.
+
+your prof was smart when she asked for 500 monkeys. the more smaples the closer your sample reaches to the population.
+
+here is an inteartie veriosn that shows this well (doesnt work)
+
+```{r}
+library(emdbook)
+library(plotly)
+library(here)
+
+m <- list(
+  l = 50,
+  r = 50,
+  b = 10,
+  t = 10,
+  pad = 4
+)
+accumulate_by <- function(dat, var) {
+  var <- lazyeval::f_eval(var, dat)
+  lvls <- plotly:::getLevels(var)
+  dats <- lapply(seq_along(lvls), function(x) {
+    cbind(dat[var %in% lvls[seq(1, x)], ], frame = lvls[[x]])
+  })
+  dplyr::bind_rows(dats)
+}
+
+d <- do.call(rbind, lapply(lseq(10,10000, 300), function(x){
+	d <- data.frame(x=rnorm(x), frame=x/300, N=x)
+	return(d)
+}))
+
+dd <- aggregate(data=d, x~frame+N, FUN=mean)
+%>% accumulate_by(~N)
+
+p <- dd %>% plot_ly(x=~log10(N), y=~x, frame=~frame, type="scatter", mode="lines", line = list(simplyfy = F, color="orangered"),width=550, height=350)%>% 
+ animation_opts(
+    frame = 10, 
+    transition = 0, 
+    redraw = FALSE
+ ) %>% 
+config(displayModeBar = F) %>%
+  layout(
+    xaxis = list(
+      title = "Sample Size (log10)",
+      zeroline = F
+    ),
+    yaxis = list(range=c(-0.7,0.7),
+      title = "Mean",
+      zeroline = F
+    ), autosize=F, margin=m
+  ) %>%
+  animation_slider(
+    hide = T
+    )%>%
+  animation_button(
+    x = 1, xanchor = "right", y = 0, yanchor = "bottom"
+  )
+```
+
+[\<https://tinystats.github.io/teacups-giraffes-and-statistics/04_variance.html\>](https://tinystats.github.io/teacups-giraffes-and-statistics/04_variance.html){.uri}
+
+[\<https://github.com/tinystats/teacups-giraffes-and-statistics/blob/master/04_variance.Rmd\>](https://github.com/tinystats/teacups-giraffes-and-statistics/blob/master/04_variance.Rmd){.uri}
+
+## spread
+
+variance
+
+strat with popualtoi var
+
+## diet
+
+ok, you now need info on diet so you get info on how much food they eat and their body size.
+
+we want to look at the covariance

@@ -1,0 +1,47 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r get and edit data}
+spotify_songs <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv')
+
+```
+
+```{r}
+spotify_songs %>% count(track_artist, sort =T) # count is part of tidyverse and gives us a count of categorical varibales...play around with counting other things?
+
+
+spotify_songs %>% count(track_artist, sort =TRUE) %>% head(30) %>% mutate(track_artist = fct_reorder(track_artist, n))  %>% ggplot(aes(n, track_artist)) + geom_col() # make a col plot. head(30) limits it to the top 30 artists since we do it after the count (and note sort=TRUE orders that list). i then use this line "mutate(track_artist = fct_reorder(track_artist, n))" to tell R to order the track_artist list by the number of entirees (otherwise the plot will order them alphabetically). 
+
+
+spotify_songs %>% mutate(release_year = as.numeric(str_sub(track_album_release_date, 0, 4))) %>% count(release_year) %>% ggplot(aes(release_year, n)) + geom_line() + scale_y_log10() #here i am using mutate() to make a new column that has just the year (this was a nightmare to do!) and then a line plot of when spotify songs were released
+
+
+###
+
+
+  
+
+spotify_songs %>% count(track_album_release_date, sort=T)  %>% head(30) %>% mutate(track_album_release_date = fct_reorder(track_album_release_date, n)) %>% ggplot(aes(n, ))
+
+
+
+ggplot()
+
+
+
+```
+

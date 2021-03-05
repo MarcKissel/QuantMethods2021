@@ -1,0 +1,118 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggridges)
+library(DT)
+library(plotly)
+```
+
+
+
+
+
+
+#Exploring hominin data
+
+This is a  version of data for my Human Evolution course next Fall. Wanted to spend the first day showing some data and talking about how we can visualize hominin evolution.
+
+
+##interactive plot
+
+Below is a scatterplot of the cranial capacity of various hominin species (species designation taken from referenced sources. Your mileage may vary as to whether these are true species or not...). Age is in millions of years. Mouse over to see info (update coming with more interactive features). 
+
+```{r, message=FALSE, error=FALSE, warning=FALSE, echo=FALSE}
+cc <-read_csv("CC_data_Updated_4.csv") #read in data
+ p2 <- ggplot(cc, aes(x = Age_in_MA_rounded, y = Cranial_capacity, color = Species_2, label = Specimen)) + geom_point() 
+#p2
+```
+
+
+
+```{r, message=FALSE, error=FALSE, warning=FALSE, echo=FALSE}
+ggplotly(p2)
+
+```
+
+
+
+##boxplot
+
+Boxplot of the cranial capacities:
+
+
+
+```{r, message=FALSE, error=FALSE, warning=FALSE, echo=FALSE}
+p_box <-  ggplot(cc, aes(x = reorder(Species_2, Cranial_capacity, na.rm = TRUE) , y = Cranial_capacity, fill = Species_2)) + geom_boxplot() + coord_flip() +labs(y= "Cranial Capacity", x = NULL)
+
+p_box
+
+#ggplotly(p_box, height = 600, width = 800)
+```
+
+
+
+##Ridge plot
+
+
+The graph below is a [ridge plot](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html), which is a density plot aligned on a horizontal scale. 
+
+
+```{r ridge_plots_2, message=FALSE, error=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=8 }
+cc <-read_csv("CC_data_Updated_4.csv") #read in data
+
+cc$Specimen<-iconv(enc2utf8(cc$Specimen),sub="byte") #fix the format of Specimen col
+
+#cc %>% group_by(Species_2) %>% summarise(max(Age_in_MA_rounded), min(Age_in_MA_rounded))
+
+
+
+plot10 <- ggplot(cc, aes(x = Cranial_capacity, y = reorder(Species_2, -date2 ),fill = Species_2)) + geom_density_ridges() + theme_ridges() + labs( caption = "data from Schoenemann 2013 & Hawks et al 2017", fill ="Species")
+
+plot10a <- plot10 + annotate("text", label = "", x =1, y =1) + theme(axis.title.y = element_blank()) + labs(x="Cranial Capacity in cm^3")
+
+plot10a
+
+```
+
+
+##Data
+
+here is the main data used to make the above figures
+
+```{r data wrangle, message=FALSE, error=FALSE, warning=FALSE, echo=FALSE}
+library(knitr)
+library(kableExtra)
+cc_edited <- cc %>% select(Specimen, Species_2, Cranial_capacity, Age_in_MA, Source)
+cc_edited <- cc_edited %>% rename(Speices = Species_2)
+kable(cc_edited,'html') %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "responsive")) %>% scroll_box(width = "700px", height = "300px")
+
+```
+
+
+
+Here is the mean cranial capacity by species for the above data:
+
+
+```{r, message=FALSE, error=FALSE, warning=FALSE, echo=FALSE}
+cc_summary <- cc %>% group_by(Species_2) %>% summarise(mean(Cranial_capacity))
+kable(cc_summary, 'html') %>% kable_styling(bootstrap_options = c("striped", "hover", "responsive"))
+
+```
+
+
+##details
+
+
+Part of this project was to learn how to better use the [Tidyverse](https://www.tidyverse.org/) to help teach students about hominin fossils.
+This was made using R with the Tidyverse, ggridges, kableExtra, and blogdown packages. 
+For the R code (which I'm sure is not as straightforward as it could be....) [click here](https://github.com/MarcKissel/Trying_again/blob/master/content/post/2018-07-20-human-evolution.Rmd)
+
+
+

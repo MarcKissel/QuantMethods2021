@@ -31,7 +31,7 @@ all_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_histogram(color="
                          labels=c("Group a", "group b"))
 ```
 
-## [New visualizations]{.ul} 
+## [New visualizations]{.ul}
 
 ```{r question 3}
 ll_data %>% ggplot(aes(tail_length, fill=monkey_pop )) + geom_density(color="#e9ecef", alpha=0.6, position = 'identity')

@@ -1,0 +1,52 @@
+---
+title: "Untitled"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## interactive
+
+you paper has been accepted but the editors want it selected for a special feature that requires an interactive component:
+
+```{r interactive, eval=FALSE}
+
+#install.packages("plotly")
+library(plotly)
+
+p <- new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop)) + geom_point()
+
+ggplotly(p)
+
+
+
+```
+
+add sample number to the hover:
+
+```{r, eval=FALSE}
+
+p <- new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop, label= sample_number)) + geom_point()
+
+ggplotly(p)
+
+```
+
+make the tooltip look pretty
+
+```{r, eval=FALSE}
+#install.packages("glue")
+library(glue)
+
+
+
+p <- new_data %>%   ggplot(aes(tail_length, ear, color = monkey_pop, text = glue('sample is: {sample_number}'))) + geom_point() # here we use glue to add the "sample is:" text in front of the sample number variable. 
+
+ggplotly(p)
+
+```

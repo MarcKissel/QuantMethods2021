@@ -1,0 +1,379 @@
+---
+title: "working with data"
+author: "Marc Kissel"
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: xaringan-themer.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+mono_light(
+  code_font_family = "Fira Code",
+  code_font_url    = "https://cdn.rawgit.com/tonsky/FiraCode/1.204/distr/fira_code.css"
+)
+```
+
+
+---
+
+
+Short video on the problems of big data:
+
+
+<iframe width="645" height="363" src="https://www.youtube.com/embed/_2u_eHHzRto" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+---
+
+class: center, middle, inverse
+
+# How do we record/store/view data in a way that allows us to use it in the future
+
+## Best advice i can give you is to think of yourself as your own co-author, looking at the data 1 year from today
+---
+
+![](http://www.phdcomics.com/comics/archive/phd101212s.gif)
+---
+
+![](images/phd101212s.gif)
+---
+
+![](https://imgs.xkcd.com/comics/documents.png)
+
+---
+.center[
+# **Spreadsheets**
+______________
+]
+
+### Interactive computer application for organization, analysis and storage of data in tabular form. Table of cells arranged into rows and columns. A cell = box that holds data    
+
+###- Columns represented by letters, "A", "B", "C"
+###- Rows represented by numbers, 1, 2, 3, 
+### Difference between spreadsheet and a database?
+---
+
+background-image: url(images/ss.jpeg)
+background-size: contain 
+
+
+---
+
+background-image: url(images/Excel_3.jpg)
+background-size: contain 
+
+---
+# Problems with Spreadsheets
+
+
+## - Panko (2008) reported that in 13 audits of real-world spreadsheets, an average of 88% contained errors
+
+## - In general, fine for storing data but not so great for analyzing/visualizing data
+
+## - Almost everyone uses them, though, and hard to get around it
+
+---
+
+## Excel
+________________
+
+## - People like to hate on Excel. Yet it is pretty standard in business and research
+
+# Excel horror stories
+ 
+## - Excel can turn gene names [into dates!](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-5-80)
+
+## - [Problems of dates](http://ecologybits.com/index.php/2016/07/06/beware-this-scary-thing-excel-can-do-to-your-data/)
+
+
+---
+
+# So why do we use them?
+
+### - Solves a lot of practical problems 
+
+### - Come preinstalled
+
+### - Does file organization for you
+
+### - Reactive 
+
+### - For many, it is totes fine to use..But if you do data analysis it can get annoying
+---
+
+class: inverse, center
+# Data organization
+
+## How can we setup data to be read by both humans *and* computers?
+
+## How can it be setup so co-authors can understand it?
+
+## How can we *avoid* mistakes
+
+
+---
+#data organization in spreadsheets
+
+## - be consistent (don't switch how you name things)
+
+
+
+---
+#data organization in spreadsheets
+
+## - write dates like YYYY-MM-DD
+
+## Excel stores dates as a number that says how many days have passed since a given date. But that *given date* isn't always the same!
+ISO 8601
+
+https://imgs.xkcd.com/comics/iso_8601.png
+---
+#data organization in spreadsheets
+
+## - don't leave any cells empty
+
+### instead use NA for missing data
+---
+
+## - put just one thing in a cell
+
+### for example: don't use "45 grams" but instead put the units in the column name
+---
+class: center, middle
+#data organization in spreadsheets
+
+
+## - organize the data as a single rectangle
+
+## The first row should contain variable names, and please do not use more than one row for the variable names. 
+
+---
+
+## - create a data dictionary
+
+### separate file that explains what all of the variables are.
+
+---
+
+## - don't include calculations in the raw data files
+
+###  Primary data file should be pristine.  make sure you can't overwrite it and do not touch it. Do analysis in another file
+
+---
+• On a Mac, right-click on the file in Finder and select "Get Info". In the menu
+that opens, there is a section at the bottom on "Sharing & Permissions". Click on
+"Privilege" for yourself and select "Read only".
+
+• In Windows, right-click on the le in Windows Explorer and select "Properties". In
+the "General" tab, there is a section at the bottom with "Attributes". Select the box
+for "Read-only" and click the "OK" button.
+
+
+---
+
+## - don't use font color or highlighting as data
+
+---
+#data organization in spreadsheets
+
+## - choose good names for things
+
+## Names of columns  should make sense, have no spaces, and be consistent
+### CamelCase, snake_case,
+
+---
+![](images/Bowman_woo_2018.jpg)
+
+
+from Broman and Woo 2018
+---
+## - make backups
+
+### good pracitce is to use the date in the file name: 2020-02-03-My_text_draft
+
+--
+
+## - use data validation to avoid data entry errors
+
+### controls the type of data you can enter into a cell. 
+
+--
+
+## - save the data in plain text files.
+
+### once you are done entering data, save it as a .csv as well...this way you can easily share with others and always have access to it
+
+---
+
+
+---
+## Names of columns  should make sense, have no spaces, and be consistent
+### CamelCase, snake_case,
+
+![](images/Bowman_woo_2018.jpg)
+
+
+---
+background-image: url(http://phdcomics.com/comics/archive/phd101212s.gif)
+
+---
+# Dates
+___________________
+## storing dates is very tricky. Most like the YYYY-MM-DD format. 
+
+
+
+[excel-options-advanced]
+
+???
+
+# Excel can do some really strange things with dates
+
+http://ecologybits.com/index.php/2016/07/06/beware-this-scary-thing-excel-can-do-to-your-data/
+
+
+https://uc3.cdlib.org/2014/04/09/abandon-all-hope-ye-who-enter-dates-in-excel/#fn2
+
+https://support.microsoft.com/en-us/help/214330/differences-between-the-1900-and-the-1904-date-system-in-excel
+
+---
+# don't leave cells open 
+_______________________
+
+## Instead, places with no info should have NA
+
+
+---
+# make backups and save data as plain text
+__________________________________
+# - learn how to  write-protect a file
+# - backup often to Google Drive
+# - do data analysis on a  **copy** of the data
+# - save it as a .csv or other text file
+
+???
+• On a Mac, right-click on the le in Finder and select \Get Info". In the menu
+that opens, there is a section at the bottom on \Sharing & Permissions". Click on
+\Privilege" for yourself and select \Read only".
+• In Windows, right-click on the le in Windows Explorer and select \Properties". In
+the \General" tab, there is a section at the bottom with \Attributes". Select the box
+for \Read-only" and click the \OK" button.
+
+---
+
+
+background-image: url(images/github.jpg)
+background-size: contain 
+
+
+---
+# data validation
+__________________________
+
+## Great feature of spreadsheets!
+## helps prevent errors
+
+
+
+---
+
+.center[
+# Text editors
+_________________
+]
+### - Get used to looking at data though a text editor, which views plain text, rather than a spreadsheet
+
+###- I tend to use Notepad, but there are [many other](https://en.wikipedia.org/wiki/Comparison_of_text_editors)
+
+### - one example of a CSV editor is [**Data Curator**](https://github.com/qcif/data-curator/releases/tag/v1.2.5) 
+
+https://github.com/qcif/data-curator
+
+---
+
+---
+
+---
+
+# background readings
+
+https://peerj.com/preprints/3183/
+https://matthewlincoln.net/2018/03/26/best-practices-for-using-google-sheets-in-your-data-project.html
+https://www.bloomberg.com/news/articles/2013-04-18/faq-reinhart-rogoff-and-the-excel-error-that-changed-history
+
+https://nacnudus.github.io/spreadsheet-munging-strategies/index.html
+http://comma-chameleon.io/  
+
+---
+
+class work:
+go to: https://datacarpentry.org/spreadsheet-ecology-lesson/02-common-mistakes/
+
+
+---
+
+read: https://matthewlincoln.net/2018/03/26/best-practices-for-using-google-sheets-in-your-data-project.html
+
+then create a group google sheet wiht some data! play aroudn wth it for awhile
+---
+# for me
+
+1. everyone gets 2 eggs? put cand in each but not everyone gets the same type
+
+.center[
+#  Spreadsheets programs
+________________________
+]
+.pull-left[
+### Excel
+### Google Sheets
+### Numbers
+### LibreOffice Online Calc
+### Airtable
+### Calligra
+]
+
+
+---
+
+
+.center[# Types of data in a spreadsheet]
+________________________________
+
+### Character - "hello" "W" "sssdsada"
+### Numeric/Double - 3, 3.565
+### Integer - only whole numbers
+### Logical - TRUE, FALSE
+### Date - 2019-01-23
+### Factor - categorical data
+
+---
+
+## other terms to know
+
+### Atomic vector - collection of elements (**all the same**). 1D
+### lists - can have mix of data types. 1D
+### matrix - 2D array of numbers
+### data frame - every element of the list has same length. 2D
+
+
+
+
+???
+lgl stands for logical, vectors that contain only TRUE or FALSE.
+int stands for integers. can't take decimals
+dbl stands for doubles, or real numbers.
+chr stands for character vectors, or strings.
+str stands for string....text
+factor are categorical data
+

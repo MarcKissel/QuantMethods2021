@@ -26,6 +26,10 @@ mono_light(
 library(tidyverse)
 ```
 
+![](https://boostlabs.com/wp-content/uploads/2019/09/10-types-of-data-visualization-1.jpg)
+
+---
+
 class: center 
 
 #class homework
@@ -36,19 +40,18 @@ class: center
 2. Do you think it is a **good** visualization? why or why not?
 
 3. what, if anything, do you think would make it better
-]
+
+4. Then, work on the second part which talks you through making plots with R and the ggplot package
 ---
 
 # week work
 
-readings: 
-chpt 4 of r4ds (go through this runnign the code in R)
+Read
 
+Healy 2019 data visualization chpt 1 (can help with homework!)
 
-work:
-HW mentioed above
-
-
+Wilke 2019 Fundementals of Data Viz, chpts 2-5 
+ 
 ---
 # why should we visualize data?
 
@@ -68,24 +71,19 @@ but what does it look like?
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Anscombe%27s_quartet_3.svg/1280px-Anscombe%27s_quartet_3.svg.png)
 
 
+---
 
+![](Datasaurus.gif)
 
 ---
-#Datasaurus
-```{r echo=FALSE}
-library(datasauRus)
-ggplot(datasaurus_dozen, aes(x=x, y=y, colour=dataset))+
-  geom_point()+
-  theme_void()+
-  theme(legend.position = "none")+
-  facet_wrap(~dataset, ncol=3)
-```
 
+
+https://rpodcast.shinyapps.io/shinysaurus/_w_d657d913/
 
 ---
 # data viz
 
-dd
+
 
 ---
 class: center 
@@ -172,8 +170,8 @@ g + geom_jitter(width = .5, size=1) +
 ```
 
 ---
-###Bubble Chart
-to understand relationship within underlying groups based on a categorical var **and** a continous varibale 
+#### Bubble Chart
+understand relationship within groups based on a categorical var **and** a continous varibale 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # load package and data
@@ -244,13 +242,6 @@ ggplot(cty_mpg, aes(x=make, y=mileage)) +
   theme(axis.text.x = element_text(angle=65, vjust=0.6))
 ```
 
-
----
-Bar vs histo
-
-see articlr
-
-
 ---
 #slope chart
 
@@ -292,8 +283,35 @@ p + theme(panel.background = element_blank(),
 
 
 ---
-####Distribution
-many types here
+#### histogram
+
+- The data of only one statistical variable are presented on the horizontal axis.
+- The data are measured at interval or ratio measurement level
+- The variable is preferably continuous
+- The vertical axis typically displays the class density   or   frequency.
+
+![](images/histo.png)
+
+???
+At first sight, histograms may appear easy to understand, but research indicates otherwise (e.g., Lem, Onghena, Verschaffel, & Van
+Dooren, 2014). In fact, many errors, misconceptions and mistakes in interpreting histograms have been documented in the literature
+(e.g., Bruno & Espinel, 2009; Derouet & Parzysz, 2016; Friel et al., 2001; Kaplan, Gabrosek, Curtiss, & Malone, 2014; Lem, Onghena,
+Verschaffel, & Van Dooren, 2013b). However, a systematic overview of these misinterpretations—a term we use as an umbrella for
+the ways in which people interpret histograms incorrectly—has not yet been compiled. Research repeatedly showed the persistence of
+the misinterpretations, despite various attempts to improve statistics education (e.g., Ben-Zvi & Garfield, 2004; Ben-Zvi et al., 2017;
+Chance, del Mas, & Garfield, 2004; Cohen, 1996; Garfield & Ben-Zvi, 2007; Kaplan et al., 2014; Shaughnessy, 2007). Hence there is a
+need to reflect on what conceptual difficulties may lie at the basis of these persistent misinterpretations. The aim of this review is
+therefore to make an inventory of the misinterpretations that occur when people use histograms, as well as to categorise these
+misinterpretations along the conceptual difficulties that become manifest in these misinterpretations. In this review, the word people
+refers to students of all levels, as well as to teachers, researchers, teacher educators and others. The question guiding this review is:
+What are the conceptual difficulties that become manifest in the common misinterpretations people have when constructing or
+interpreting histograms?
+
+---
+
+
+---
+
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -312,16 +330,6 @@ g + geom_histogram(aes(fill=class),
 
 ```
 
----
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-g + geom_histogram(aes(fill=class), 
-                   bins=5, 
-                   col="black", 
-                   size=.1) +   # change number of bins
-  labs(title="Histogram with Fixed Bins", 
-       subtitle="Engine Displacement across Vehicle Classes") 
-```
 
 ---
 #density
@@ -339,6 +347,8 @@ g + geom_density(aes(fill=factor(cyl)), alpha=0.8) +
          x="City Mileage",
          fill="# Cylinders")
 ```
+
+
 
 ---
 #boxplot
@@ -427,6 +437,29 @@ g + geom_tufteboxplot() +
 
 ![](https://heapanalytics.com/blog/data-stories/how-to-lie-with-data-visualization)
 
+
+
+---
+
+![](https://miro.medium.com/max/875/1*uI-z9s9_URfjzpQc3FCDxw.png)
+???
+
+The graph shows the number of COVID-19 tests per million people. Flook at those bars: Argentina tests almost as many people as the USA! At least that’s what it seems like until you look at the numbers. 
+---
+![](https://miro.medium.com/max/768/1*2XZ667k6b_haq-jrHb58HQ.png)
+
+
+---
+
+![](https://storage.ning.com/topology/rest/1.0/file/get/8259702852?profile=RESIZE_710x)
+
+date hopping back and forth along the x-axis to produce a "staircase" effect.
+
+???
+According to the Associated Press [4], The State of Georgia indulged in time travel with date hopping back and forth along the x-axis to produce a "staircase" effect.  27 April comes after 28 April, 1st May comes before 30th April, and the 2nd of May comes after the 6th and 5th of May. The colored bars are also arranged in a different order for each date. Georgia state Rep. Jasmine Clark, a Democrat with a doctorate in microbiology, said the graph  was a “prime example of malfeasance...Sadly it feels like there’s been an attempt to make the data fit the narrative, and that’s not how data works.” Here's AP's recreation of what the data should look like if ordered correctly, date-wise:
+
+
+
 ---
 # bad data
 
@@ -469,14 +502,17 @@ the 3-D columns in combination with the default angle of view for the chart make
 
 ---
 
-![](https://socviz.co/dataviz-pdfl_files/figure-html4/ch-01-preception-data-1.png)
+pie charts
 
+![](https://assets.weforum.org/editor/responsive_large_webp_2xoUO5D7IwC3YkGQwpTkJmP2rywJohRgFxvMsdKjRmk.webp)
 ???
+Pie charts, like this one showing employment breakdown for a region, are notoriously difficult to parse. Notice how hard it is to pull out which employment category is highest or how they rank. The pie chart’s wedges are not organized by size, there are too many categories (11!), the 3D perspective distorts the wedge sizes, and some wedges are separate from others making size comparisons almost impossible.
+---
 
-Even when the underlying numbers are sensible, the default settings of software are good, and the presentation of charts is mostly junk-free, some charts remain more difficult to interpret than others. They encode data in ways that are hard for viewers to understand. Figure 1.11 presents a stacked bar chart with time in years on the x-axis and some value on the y-axis. The bars show the total value, with subdivisions by the relative contribution of different categories to each year’s observation. Charts like this are common when showing the absolute contribution of various products to total sales over time, for example, or the number of different groups of people in a changing population. Equivalently, stacked line-graphs showing similar kinds of trends are also common for data with many observation points on the x-axis, such as quarterly observations over a decade.
+![](https://assets.weforum.org/editor/responsive_large_webp_YTV67G-8DOITOVaf2lOzT03eg_Wa2aEhIwzuhWIIV3w.webp)
+/
 
-In a chart like this, the overall trend is readily interpretable, and it is also possible to easily follow the over-time pattern of the category that is closest to the x-axis baseline (in this case, Type D, colored in purple). But the fortunes of the other categories are not so easily grasped. Comparisons of both the absolute and the relative share of Type B or C are much more difficult, whether one wants to compare trends within type, or between them. Relative comparisons need a stable baseline. In this case, that’s the x-axis, which is why the overall trend and the Type D trend are much easier to see than any other trend.
-
+A bar chart is a better option for an informative display and helps show which industries people are employed in.
 ---
 #how perception works:
 
@@ -487,12 +523,7 @@ In a chart like this, the overall trend is readily interpretable, and it is also
 ---
 
 
----
-
-
-Their results are shown in Figure 1.23, along with Cleveland and McGill’s original results for comparison. The replication was quite good. The overall pattern of results seems clear, with performance worsening substantially as we move away from comparison on a common scale to length-based comparisons to angles and finally areas. Area comparisons perform even worse than the (justifiably) much-maligned pie chart.
-
-These findings, and other work in this tradition, strongly suggest that there are better and worse ways of visually representing data when the task the user must perform involves estimating and comparing values within the graph. Think of this as a “decoding” operation that the viewer must perform in order to understand the content. The data values were encoded or mapped in to the graph, and now we have to get them back out again. When doing this, we do best judging the relative position of elements aligned on a common scale, as for example when we compare the heights of bars on a bar chart, or the position of dots with reference to a fixed x or y axis. When elements are not aligned but still share a scale, comparison is a little harder but still pretty good. It is more difficult again to compare the lengths of lines without a common baseline.
+![](https://i.redd.it/mkbu3ujj91y21.jpg)
 
 
 ---

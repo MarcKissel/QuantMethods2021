@@ -1,0 +1,259 @@
+---
+title: "some notes on working with data tables in R"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+parse_integer(c("123", "345", "abc", "123.45"))
+
+
+parse_number(c("123", "345", "abc", "123.45"))
+
+```
+
+#parsing numbers from data is tricky
+# People write numbers differently in different parts of the world. 
+#For example, some countries use . and other , before the fraction
+# 
+# Numbers are often surrounded by other characters that provide some context, like “$1000” or “10%”.
+# 
+# Numbers often contain “grouping” characters to make them easier to read, like “1,000,000”, and these grouping characters vary around the world.
+
+Example of how to fix
+
+```{r}
+parse_double("1.23")
+parse_double("1,23")
+
+parse_double("1,23", locale = locale(decimal_mark = ","))
+
+
+# also, parse number just ignores most other things
+
+parse_number("the gift cost $123.45")
+
+```
+
+
+```{r}
+charToRaw("Marc")
+#hexadecmial
+```
+
+the mapping from hexadecimal number to character is called the encoding. here  encoding is called ASCII. ASCII does a great job of representing English characters, because it’s the American Standard Code for Information Interchange.
+BUt this can fail if we have data that isn't in English  Characters
+
+to fix this, one common encoding used is called UTF-8 (uber fun fact: this lets you do emojis!)
+
+because of all of this, readr uses and assumes UTF-8 encoding
+
+but sometimes this is bad if data is from an older system and it gives back werid stuff
+
+```{r}
+
+x2 <- "\x82\xb1\x82\xf1\x82\xc9\x82\xbf\x82\xcd"
+
+parse_character(x2, locale = locale(encoding = "Shift-JIS"))
+```
+
+Good datasets tell us the encoding used but that is also not that common. Readr will guess the encoding for you but this sometimes fails or isn't ideal
+
+```{r}
+guess_encoding(charToRaw(x2))
+```
+
+
+# dates etc
+
+
+parse_datetime() expects an ISO8601 date-time.
+ISO 8601 date  organised from biggest to smallest: year, month, day, hour, minute, second.
+
+
+```{r}
+parse_datetime("2010-10-01T2010")
+
+parse_datetime("20101010")
+#no time so it sets it to midnight
+```
+
+parse_date() expects a four digit year, a - or /, the month, a - or /, then the day:
+
+
+```{r}
+parse_date("2010-10-01")
+```
+
+
+Year
+%Y (4 digits).
+%y (2 digits); 00-69 -> 2000-2069, 70-99 -> 1970-1999.
+
+Month
+%m (2 digits).
+%b (abbreviated name, like “Jan”).
+%B (full name, “January”).
+
+Day
+%d (2 digits).
+%e (optional leading space)
+
+Non-digits
+%. skips one non-digit character.
+%* skips any number of non-digits.
+
+
+
+```{r}
+parse_date("01/02/15", "%m/%d/%y")
+
+
+
+parse_date("01/02/15", "%d/%m/%y")
+
+parse_date("01/02/15", "%y/%m/%d")
+#> [1] "2001-02-15"```
+```
+
+
+Non-digits
+%. skips one non-digit character.
+%* skips any number of non-digits.
+
+
+# readr
+```{r}
+challenge <- read_csv(readr_example("challenge.csv"))
+problems(challenge)
+```
+
+
+```{r}
+
+challenge <- read_csv(
+  readr_example("challenge.csv"), 
+  col_types = cols(
+    x = col_double(),
+    y = col_logical()
+  )
+)
+
+
+challenge <- read_csv(
+  readr_example("challenge.csv"), 
+  col_types = cols(
+    x = col_double(),
+    y = col_date()
+  )
+)
+challenge
+
+
+```
+
+
+# separate() pulls apart one column into multiple columns, by splitting wherever a separator character appears. Take table3:
+
+
+
+```{r}
+table3
+```
+
+
+```{r}
+table3 %>% 
+  separate(rate, into = c("cases", "population"))
+```
+
+By default, separate() will split values wherever it sees a non-alphanumeric character (i.e. a character that isn’t a number or letter). For example, in the code above, separate() split the values of rate at the forward slash characters. If you wish to use a specific character to separate a column, you can pass the character to the sep argument of separate(). For example, we could rewrite the code above as:
+
+
+```{r}
+table3 %>% 
+  separate(rate, into = c("cases", "population"), sep = "/")
+```
+
+
+```{r}
+table3 %>% 
+  separate(rate, into = c("cases", "population"), convert = TRUE)
+```
+
+
+
+```{r}
+table3 %>% 
+  separate(year, into = c("century", "year"), sep = 2)
+```
+
+
+
+# unite
+
+
+combines multiple columns into a single column. 
+
+```{r}
+table5
+```
+
+
+```{r}
+table5 %>% 
+  unite(full_year, century, year)
+```
+
+
+# missing values
+
+```{r}
+stocks <- tibble(
+  year   = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+  qtr    = c(   1,    2,    3,    4,    2,    3,    4),
+  return = c(1.88, 0.59, 0.35,   NA, 0.92, 0.17, 2.66)
+)
+```
+
+
+The return for the fourth quarter of 2015 is explicitly missing, because the cell where its value should be instead contains NA.
+
+The return for the first quarter of 2016 is implicitly missing, because it simply does not appear in the dataset.
+
+**An explicit missing value is the presence of an absence; an implicit missing value is the absence of a presence.**
+
+
+```{r}
+stocks %>% 
+  complete(year, qtr)
+```
+
+sometimes folks use missing values to indicate that the above value should be filled in
+
+```{r}
+treatment <- tribble(
+  ~ person,           ~ treatment, ~response,
+  "Derrick Whitmore", 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  "Katherine Burke",  1,           4
+)
+
+```
+
